@@ -5,7 +5,7 @@ import * as AppAuth from 'expo-app-auth';
 global.isSignedIn = false;
 
 export default function Authenticator() {
-    let [authState, setAuthState] = useState(null);
+  let [authState, setAuthState] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -31,6 +31,7 @@ export default function Authenticator() {
           onPress={async () => {
             const _authState = await signInAsync();
             setAuthState(_authState);
+            navigation.navigate()
             }}
           > Sign in with Google </Text>
         
