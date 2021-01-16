@@ -14,7 +14,7 @@ export const Provider = props => {
   const [user, setUser] = useState(initialUser);
 
   // Make the context object:
-  const usersContext = {
+  const userContext = {
     user,
     setUser
   };
