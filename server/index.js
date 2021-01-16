@@ -8,7 +8,7 @@ const app = express();
 const serverPort = process.env.PORT || 5000;
 
 // Routes
-const logs = require("./routes/api/logs");
+const users = require("./routes/api/users");
 
 // Mongo Atlas Config
 const uri = process.env.MONGO_URI;
@@ -30,7 +30,7 @@ app.use(
 app.use(bodyParser.json());
 
 // Routes
-app.use("/api/logs", logs);
+app.use("/api/users", users);
 
 app.listen(serverPort, () => {
   console.log(`Server is running on port ${serverPort}`);
