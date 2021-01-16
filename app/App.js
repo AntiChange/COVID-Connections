@@ -1,170 +1,174 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
-import { render } from 'react-dom';
-import { AsyncStorage, StyleSheet, Text, View, Dimensions, SafeAreaView, ScrollView, Button, Image } from 'react-native';
-import Authenticator from './components/Authenticator';
-import 'react-native-gesture-handler';
-import { NavigationContainer } from '@react-navigation/native';
-import * as AppAuth from 'expo-app-auth';
-import { createStackNavigator } from '@react-navigation/stack';
-
-const Stack = createStackNavigator();
-
-
-export default function App() {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name = "Login" component = {LoginScreen}/>
-          <Stack.Screen name = "Home" component = {HomeScreen}/>
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
-};
-
-const LoginScreen = ({ navigation }) => {
-  let [authState, setAuthState] = useState(null);
-
-  useEffect(() => {
-    (async () => {
-      let cachedAuth = await getCachedAuthAsync();
-      if (cachedAuth && !authState) {
-        setAuthState(cachedAuth);
-      }
-    })();
-  }, []);
-
-  return (
-  
-  <SafeAreaView style={styles.container}>
-    <ScrollView style={styles.scrollView}>
-            
-    <View style={styles.container}>
-        
-        <Text
-            style={{fontSize: 30}}
-            >Covid Tracker++</Text>
-          <Text></Text>
-
-          <Text 
-          alignItems = 'cemter'
-          backgroundColor = "#FFFFFFF"
-          style={styles.button} 
-          onPress={async () => {
-            const _authState = await signInAsync();
-            setAuthState(_authState);
-            console.log("This has run!")
-            navigation.navigate('Home')
-            }}
-          > Sign in with Google </Text>
-        
-      </View>
-            
-    </ScrollView>
-  </SafeAreaView>
-  );
-}
-
-const HomeScreen = ({ navigation }) => {
-  return (
-    <SafeAreaView >
-      <ScrollView style={styles.scrollView}>
-        <Text>You are on the home screen!</Text>   
-      </ScrollView>
-    </SafeAreaView>
-    );
-  }
+import React, { Component } from 'react';
+import {
+  Switch,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from 'react-native';
+import Constants from 'expo-constants';
+import * as Animatable from 'react-native-animatable';
+import Collapsible from 'react-native-collapsible';
+import Accordion from 'react-native-collapsible/Accordion';
 
 
-  
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: '#8DFF50',
-    alignItems: 'center',
-    padding: 10,
-    borderRadius: 16,
-    width: 150,
-    justifyContent: 'center'
- },
-  container: {
-  flex: 1,
-  paddingTop: 100,
-  backgroundColor: '#fff',
-  alignItems: 'center',
-  justifyContent: 'center',
-},
-
-  scrollView: {
-
+const CONTENT = [
+  {
+    title: 'Bob Joe - Healthy',
+    content: "Status: " + "Self-isolating, " + "Unvaccinated" + "\n\n" + "January 16th" + " - " + "Went to grocery store\nJanuary 14th - Went to friends birthday party\nJanuary 4th - Returned from Italy trip",
   },
-  
-  text: {
-    fontSize: 50,
-    fontWeight: 'bold'
-  }
-});
-
-
-let config = {
-  issuer: 'https://accounts.google.com',
-  scopes: ['openid', 'profile'],
-  /* This is the CLIENT_ID generated from a Firebase project */
-  clientId: '603386649315-vp4revvrcgrcjme51ebuhbkbspl048l9.apps.googleusercontent.com',
-};
-
-let StorageKey = '@MyApp:CustomGoogleOAuthKey';
+  {
+    title: 'Billy Bob - Healthy',
+    content: "Status: Frontline Worker, Vaccinated\n\nWeekly - Works as Restaurant waiter\nJanuary 12th - Went to eat in nearby restaurant\nJanuary 1th - Celebrated with 2 friends",
+  },
+  {
+    title: 'Billy Joe - Possible Contact',
+    content: "Status: Sick, Self-isolating\n\nWeekly - Works at office\nJanuary 14th - Started to feel unwell\nJanuary 12th - Went to bar after work",
+  },
+ 
+];
 
 
 
-export async function signInAsync() {
-  let authState = await AppAuth.authAsync(config);
-  await cacheAuthAsync(authState);
-  console.log('signInAsync', authState);
-  global.isSignedIn = true;
-  console.log("This has run!");
-  return authState;
-}
+export default class App extends Component {
+  state = {
+    activeSections: [],
+    collapsed: true,
+    multipleSelect: false,
+  };
 
-async function cacheAuthAsync(authState) {
-  return await AsyncStorage.setItem(StorageKey, JSON.stringify(authState));
-}
+  toggleExpanded = () => {
+    this.setState({ collapsed: !this.state.collapsed });
+  };
 
-export async function getCachedAuthAsync() {
-  let value = await AsyncStorage.getItem(StorageKey);
-  let authState = JSON.parse(value);
-  console.log('getCachedAuthAsync', authState);
-  if (authState) {
-    if (checkIfTokenExpired(authState)) {
-      return refreshAuthAsync(authState);
-    } else {
-      return authState;
-    }
-  }
-  return null;
-}
-
-function checkIfTokenExpired({ accessTokenExpirationDate }) {
-  return new Date(accessTokenExpirationDate) < new Date();
-}
-
-async function refreshAuthAsync({ refreshToken }) {
-  let authState = await AppAuth.refreshAsync(config, refreshToken);
-  console.log('refreshAuth', authState);
-  await cacheAuthAsync(authState);
-  return authState;
-}
-
-export async function signOutAsync({ accessToken }) {
-  try {
-    await AppAuth.revokeAsync(config, {
-      token: accessToken,
-      isClientIdProvided: true,
+  setSections = sections => {
+    this.setState({
+      activeSections: sections.includes(undefined) ? [] : sections,
     });
-    await AsyncStorage.removeItem(StorageKey);
-    return null;
-  } catch (e) {
-    alert(`Failed to revoke token: ${e.message}`);
+  };
+
+  renderHeader = (section, _, isActive) => {
+    return (
+      <Animatable.View
+        duration={400}
+        style={[styles.header, isActive ? styles.active : styles.inactive]}
+        transition="backgroundColor"
+      >
+        <Text style={styles.headerText}>{section.title}</Text>
+      </Animatable.View>
+    );
+  };
+
+  renderContent(section, _, isActive) {
+    return (
+      <Animatable.View
+        duration={400}
+        style={[styles.content, isActive ? styles.active : styles.inactive]}
+        transition="backgroundColor"
+      >
+        <Animatable.Text animation={isActive ? 'zoomIn' : undefined}>
+          {section.content}
+        </Animatable.Text>
+      </Animatable.View>
+    );
   }
-  global.isSignedIn = false;
+
+  render() {
+    const { multipleSelect, activeSections } = this.state;
+
+    return (
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={{ paddingTop: 30 }}>
+          <Text style={styles.title}>Connections</Text>
+
+          
+
+          
+
+          <TouchableOpacity onPress={this.toggleExpanded}>
+            
+          </TouchableOpacity>
+          <Collapsible collapsed={this.state.collapsed} align="center">
+            <View style={styles.content}>
+              <Text>
+                Bacon ipsum dolor amet chuck turducken landjaeger tongue spare
+                ribs
+              </Text>
+            </View>
+          </Collapsible>
+          <Accordion
+            activeSections={activeSections}
+            sections={CONTENT}
+            touchableComponent={TouchableOpacity}
+            expandMultiple={multipleSelect}
+            renderHeader={this.renderHeader}
+            renderContent={this.renderContent}
+            duration={400}
+            onChange={this.setSections}
+          />
+        </ScrollView>
+      </View>
+    );
+  }
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F5FCFF',
+    paddingTop: Constants.statusBarHeight,
+  },
+  title: {
+    textAlign: 'center',
+    fontSize: 30,
+    fontWeight: '300',
+    marginBottom: 20,
+  },
+  header: {
+    backgroundColor: '#F5FCFF',
+    padding: 10,
+  },
+  headerText: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: '500',
+  },
+  content: {
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+  active: {
+    backgroundColor: 'rgba(255,255,255,1)',
+  },
+  inactive: {
+    backgroundColor: 'rgba(245,252,255,1)',
+  },
+  selectors: {
+    marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  selector: {
+    backgroundColor: '#F5FCFF',
+    padding: 10,
+  },
+  activeSelector: {
+    fontWeight: 'bold',
+  },
+  selectTitle: {
+    fontSize: 14,
+    fontWeight: '500',
+    padding: 10,
+  },
+  multipleToggle: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginVertical: 30,
+    alignItems: 'center',
+  },
+  multipleToggle__title: {
+    fontSize: 16,
+    marginRight: 8,
+  },
+});
