@@ -2,12 +2,20 @@ const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const passport = require('passport')
+const passport = require('passport');
 
 require('dotenv').config();
 
 const app = express();
 const serverPort = process.env.PORT || 5000;
+
+// Bodyparser middleware
+app.use(
+  bodyParser.urlencoded({
+    extended: false
+  })
+);
+app.use(bodyParser.json());
 
 // Routes
 const users = require("./routes/api/users");
@@ -22,14 +30,6 @@ connection.once('open', () => {
 
 // CORS middleware - we're allowing all origins by not giving any arguments
 app.use(cors());
-
-// Bodyparser middleware
-app.use(
-  bodyParser.urlencoded({
-    extended: false
-  })
-);
-app.use(bodyParser.json());
 
 // Passport middleware
 app.use(passport.initialize());
