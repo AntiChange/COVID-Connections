@@ -18,26 +18,22 @@ export default function Authenticator() {
 
   return (
     <View style={styles.container }>
-        <TouchableOpacity>
+        
+        <Text
+            style={{fontSize: 30}}
+            >Covid Tracker++</Text>
+          <Text></Text>
+
           <Text 
+          alignItems = 'cemter'
+          backgroundColor = "#FFFFFFF"
           style={styles.button} 
           onPress={async () => {
             const _authState = await signInAsync();
             setAuthState(_authState);
             }}
           > Sign in with Google </Text>
-        </TouchableOpacity>
-        <Text></Text>
-        <TouchableOpacity>
-          <Text 
-          style={styles.button} 
-          onPress={async () => {
-            await signOutAsync(authState);
-            setAuthState(null);
-          }}
-  
-          >Sign Out </Text>
-        </TouchableOpacity>
+        
       </View>
   );
         
@@ -104,16 +100,16 @@ export default function Authenticator() {
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: '#0277BD',
+        backgroundColor: '#8DFF50',
         alignItems: 'center',
         padding: 10,
         borderRadius: 16,
-        width: 120,
+        width: 150,
         justifyContent: 'center'
     },
     container: {
       flex: 1,
-      paddingTop: 400,
+      paddingTop: 375,
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
