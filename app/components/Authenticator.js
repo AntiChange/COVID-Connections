@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AsyncStorage, Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as AppAuth from 'expo-app-auth';
 
-
+global.isSignedIn = false;
 
 export default function Authenticator() {
     let [authState, setAuthState] = useState(null);
@@ -49,10 +49,14 @@ export default function Authenticator() {
   
   let StorageKey = '@MyApp:CustomGoogleOAuthKey';
   
+  
+
   export async function signInAsync() {
     let authState = await AppAuth.authAsync(config);
     await cacheAuthAsync(authState);
     console.log('signInAsync', authState);
+    global.isSignedIn = true;
+    console.log("This has run!");
     return authState;
   }
   
@@ -96,6 +100,7 @@ export default function Authenticator() {
     } catch (e) {
       alert(`Failed to revoke token: ${e.message}`);
     }
+    global.isSignedIn = false;
 }
 
 const styles = StyleSheet.create({
