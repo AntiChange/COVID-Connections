@@ -30,10 +30,10 @@ export default function Authenticator() {
           setAuthState(null);
         }}
       />
-      <Text>{JSON.stringify(authState, null, 2)}</Text>
+      
     </View>
   );
-
+        
   
   }
   

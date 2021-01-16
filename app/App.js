@@ -8,6 +8,7 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <Authenticator />
+        
       </ScrollView>
     </SafeAreaView>
   );
