@@ -17,28 +17,28 @@ export default function Authenticator() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={{ color: "#000000" }}>  Sign in with Google</Text>
-      <TouchableOpacity
-        style = {styles.button}
-        
-        onPress={async () => {
-          const _authState = await signInAsync();
-          setAuthState(_authState);
-        }}
-        
-      />
-      <Text style={{ color: "#000000" }}>  Sign Out</Text>
-      <TouchableOpacity
-        style = {styles.button}
-        
-        onPress={async () => {
-          await signOutAsync(authState);
-          setAuthState(null);
-        }}
-      />
-      
-    </View>
+    <View style={styles.container }>
+        <TouchableOpacity>
+          <Text 
+          style={styles.button} 
+          onPress={async () => {
+            const _authState = await signInAsync();
+            setAuthState(_authState);
+            }}
+          > Sign in with Google </Text>
+        </TouchableOpacity>
+        <Text></Text>
+        <TouchableOpacity>
+          <Text 
+          style={styles.button} 
+          onPress={async () => {
+            await signOutAsync(authState);
+            setAuthState(null);
+          }}
+  
+          >Sign Out </Text>
+        </TouchableOpacity>
+      </View>
   );
         
   
@@ -106,9 +106,10 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: '#0277BD',
         alignItems: 'center',
-        padding: 20,
+        padding: 10,
         borderRadius: 16,
-        width: 120
+        width: 120,
+        justifyContent: 'center'
     },
     container: {
       flex: 1,
