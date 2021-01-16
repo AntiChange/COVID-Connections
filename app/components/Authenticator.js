@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { AsyncStorage, Button, StyleSheet, Text, View } from 'react-native';
+import { AsyncStorage, Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as AppAuth from 'expo-app-auth';
+
+
+
 export default function Authenticator() {
     let [authState, setAuthState] = useState(null);
 
@@ -15,16 +18,20 @@ export default function Authenticator() {
 
   return (
     <View style={styles.container}>
-      <Text>Expo AppAuth Example</Text>
-      <Button
-        title="Sign In with Google "
+      <Text style={{ color: "#000000" }}>  Sign in with Google</Text>
+      <TouchableOpacity
+        style = {styles.button}
+        
         onPress={async () => {
           const _authState = await signInAsync();
           setAuthState(_authState);
         }}
+        
       />
-      <Button
-        title="Sign Out "
+      <Text style={{ color: "#000000" }}>  Sign Out</Text>
+      <TouchableOpacity
+        style = {styles.button}
+        
         onPress={async () => {
           await signOutAsync(authState);
           setAuthState(null);
@@ -96,9 +103,16 @@ export default function Authenticator() {
 }
 
 const styles = StyleSheet.create({
+    button: {
+        backgroundColor: '#0277BD',
+        alignItems: 'center',
+        padding: 20,
+        borderRadius: 16,
+        width: 120
+    },
     container: {
       flex: 1,
-      paddingTop: 50,
+      paddingTop: 400,
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
