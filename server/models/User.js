@@ -22,6 +22,11 @@ const UserSchema = new Schema({
     type: Boolean,
     required: true,
     default: false
+  },
+  token: {
+    type: String,
+    required: false,
+    expires: 259200 // 3 days
   }
 });
 

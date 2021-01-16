@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const passport = require('passport')
+
 require('dotenv').config();
 
 const app = express();
@@ -28,6 +30,11 @@ app.use(
   })
 );
 app.use(bodyParser.json());
+
+// Passport middleware
+app.use(passport.initialize());
+require("./config/passport")(passport);
+
 
 // Routes
 app.use("/api/users", users);
