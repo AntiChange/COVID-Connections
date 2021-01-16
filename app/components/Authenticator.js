@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { AsyncStorage, Button, StyleSheet, Text, View } from 'react-native';
+import { AsyncStorage, Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as AppAuth from 'expo-app-auth';
+
+global.isSignedIn = false;
+
 export default function Authenticator() {
     let [authState, setAuthState] = useState(null);
 
@@ -14,24 +17,24 @@ export default function Authenticator() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text>Expo AppAuth Example</Text>
-      <Button
-        title="Sign In with Google "
-        onPress={async () => {
-          const _authState = await signInAsync();
-          setAuthState(_authState);
-        }}
-      />
-      <Button
-        title="Sign Out "
-        onPress={async () => {
-          await signOutAsync(authState);
-          setAuthState(null);
-        }}
-      />
-      
-    </View>
+    <View style={styles.container }>
+        
+        <Text
+            style={{fontSize: 30}}
+            >Covid Tracker++</Text>
+          <Text></Text>
+
+          <Text 
+          alignItems = 'cemter'
+          backgroundColor = "#FFFFFFF"
+          style={styles.button} 
+          onPress={async () => {
+            const _authState = await signInAsync();
+            setAuthState(_authState);
+            }}
+          > Sign in with Google </Text>
+        
+      </View>
   );
         
   
@@ -46,10 +49,14 @@ export default function Authenticator() {
   
   let StorageKey = '@MyApp:CustomGoogleOAuthKey';
   
+  
+
   export async function signInAsync() {
     let authState = await AppAuth.authAsync(config);
     await cacheAuthAsync(authState);
     console.log('signInAsync', authState);
+    global.isSignedIn = true;
+    console.log("This has run!");
     return authState;
   }
   
@@ -93,12 +100,21 @@ export default function Authenticator() {
     } catch (e) {
       alert(`Failed to revoke token: ${e.message}`);
     }
+    global.isSignedIn = false;
 }
 
 const styles = StyleSheet.create({
+    button: {
+        backgroundColor: '#8DFF50',
+        alignItems: 'center',
+        padding: 10,
+        borderRadius: 16,
+        width: 150,
+        justifyContent: 'center'
+    },
     container: {
       flex: 1,
-      paddingTop: 50,
+      paddingTop: 375,
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',

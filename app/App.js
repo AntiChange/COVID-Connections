@@ -1,17 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
+import { render } from 'react-dom';
 import { StyleSheet, Text, View, Dimensions, SafeAreaView, ScrollView, Button, Image } from 'react-native';
 import Authenticator from './components/Authenticator';
 
 export default function App() {
-  return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-        <Authenticator />
-        
-      </ScrollView>
-    </SafeAreaView>
-  );
+  
+    return (
+      <SafeAreaView style={styles.container}>
+        <ScrollView style={styles.scrollView}>
+          
+          <Authenticator />
+          
+        </ScrollView>
+      </SafeAreaView>
+    );
 };
 
 const styles = StyleSheet.create({
@@ -25,3 +28,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   }
 });
+
