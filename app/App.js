@@ -1,7 +1,7 @@
 import React from 'react';
 import { AuthProvider } from "./auth";
 import AppRoutes from './AppRoutes'
-import React from 'react';
+
 import {
   StyleSheet,
 } from 'react-native';
