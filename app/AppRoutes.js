@@ -26,9 +26,7 @@ function AppRoutes() {
 		<NavigationContainer>
         <Stack.Navigator>
         {userDetails.token != null ? (
-            <Stack.Screen name="Home" component={Home}
-                
-                 />
+            <Stack.Screen name="Home" component={Home}/>
         ) : (
             <Stack.Screen name="Login" component={Login} />
         )}
