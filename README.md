@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <img src="https://user-images.githubusercontent.com/52430997/104851182-b7702300-58b0-11eb-85b5-3fa7a427b494.png" width="200">
+  <img src="https://user-images.githubusercontent.com/52430997/104851182-b7702300-58b0-11eb-85b5-3fa7a427b494.png" width="300">
   <br>
   COVID Connections
   <br>
@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  <a href="#overview">Overview</a> • <a href="#screenshots">Screenshots</a> • <a href="#features">Features Requirements</a> • <a href="#installation">Installation</a> • <a href="#authors">Authors</a> • <a href="#license">License</a>
+  <a href="#overview">Overview</a> • <a href="#screenshots">Screenshots</a> • <a href="#features">Features</a> • <a href="#installation">Installation</a> • <a href="#authors">Authors</a> • <a href="#license">License</a>
 </p>
 
 ## Overview
