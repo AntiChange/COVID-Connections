@@ -1,24 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { loginUser, useAuthState, useAuthDispatch } from '../auth';
-import { StyleSheet, Text, View, Dimensions, SafeAreaView, ScrollView} from 'react-native';
+import { StyleSheet, Text, View, Dimensions, SafeAreaView, ScrollView, navigation} from 'react-native';
 import 'react-native-gesture-handler';
 /*import PasswordField from './PasswordField';
 import UsernameField from './UsernameField';*/
 import { Button, TextInput } from 'react-native-paper';
+import { register } from '../auth/actions';
 
-function Login({ navigation }) {
+
+
+function Register({ navigation }) {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
+    const [fullName, setName] = useState('');
 
 	const dispatch = useAuthDispatch();
 	const { loading, errorMessage } = useAuthState();
 
-	const handleLogin = async (e) => {
+	const handleRegister = async (e) => {
 		e.preventDefault();
 
 		try {
             //let response = await loginUser(dispatch, { username, password });
-            let response = await loginUser(dispatch, { username: username, password: password });
+            let response = await register(dispatch, { username: username, password: password, name: fullName });
 
 		} catch (error) {
 			console.log(error);
@@ -33,7 +37,7 @@ function Login({ navigation }) {
               
               <Text
                   style={{fontSize: 30}}
-                  >Covid Tracker++</Text>
+                  >Register new Account</Text>
                 <Text></Text>
                 <TextInput
                 label="Username"
@@ -47,22 +51,23 @@ function Login({ navigation }) {
                 onChangeText={password => setPassword(password)}
                 />
                 <Text></Text>
-      
-                <Text 
-                backgroundColor = "#FFFFFFF"
-                style={styles.button1} 
-                //currently placeholder function
-                onPress={handleLogin}
-                > Login </Text>
-      
+                <TextInput
+                label="Full name"
+                value={fullName}
+                onChangeText={fullName => setName(fullName)}
+                />
                 <Text></Text>
       
                 <Text 
                 backgroundColor = "#FFFFFFF"
-                style={(styles.button2)} 
+                style={styles.button3} 
                 //currently placeholder function
-                onPress={() => navigation.navigate("Registry")}
-                  > Register </Text>
+                onPress={handleRegister}
+                > Complete Registration </Text>
+      
+                <Text></Text>
+      
+                
               
             </View>
                   
@@ -71,11 +76,11 @@ function Login({ navigation }) {
         );
 }
 
-export default Login;
+export default Register;
 
 
 const styles = StyleSheet.create({
-    button1: {
+    button3: {
       backgroundColor: '#B19CD9',
       alignItems: 'center',
       padding: 10,
@@ -85,14 +90,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center'
       },
 
-  button2: {
-    backgroundColor: '#B19CD9',
-    alignItems: 'stretch',
-    padding: 10,
-    borderRadius: 16,
-    width: 80,
-    justifyContent: 'center'
-    },
+  
 
   container: {
     flex: 1,
@@ -118,4 +116,3 @@ const styles = StyleSheet.create({
 
   
   });
-
