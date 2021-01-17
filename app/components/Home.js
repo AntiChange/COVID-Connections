@@ -12,7 +12,7 @@ import * as Animatable from 'react-native-animatable';
 import Collapsible from 'react-native-collapsible';
 import Accordion from 'react-native-collapsible/Accordion';
 import MyComponent from './AddConnection';
-import drawer from './drawer';
+import { useAuthDispatch, logout } from '../auth';
 
 
 const CONTENT = [
@@ -33,12 +33,16 @@ const CONTENT = [
 
 
 export default class Home extends Component {
-  drawer(){}
   state = {
     activeSections: [],
     collapsed: true,
     multipleSelect: false,
   };
+
+  handleLogout = () => {
+    const dispatch = useAuthDispatch();
+		logout(dispatch);
+	};
 
   toggleExpanded = () => {
     this.setState({ collapsed: !this.state.collapsed });
@@ -83,7 +87,7 @@ export default class Home extends Component {
       
       <View style={styles.container}>
         <ScrollView contentContainerStyle={{ paddingTop: 30 }}>
-          <Text style={styles.title}>Connections</Text>
+          <Text style={styles.title}>Contacts</Text>
 
           <MyComponent />
 
@@ -110,6 +114,12 @@ export default class Home extends Component {
             duration={400}
             onChange={this.setSections}
           />
+          <Text 
+            backgroundColor = "#FFFFFFF"
+            style={styles.button1} 
+            //currently placeholder function
+            onPress={handleLogout}
+            > Log Out </Text>
         </ScrollView>
       </View>
     );
@@ -173,5 +183,15 @@ const styles = StyleSheet.create({
   multipleToggle__title: {
     fontSize: 16,
     marginRight: 8,
+  },
+  button1: {
+    backgroundColor: '#B19CD9',
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 16,
+    width: 150,
+    marginTop: 30,
+    textAlign: "center",
+    justifyContent: 'center'
   },
 });

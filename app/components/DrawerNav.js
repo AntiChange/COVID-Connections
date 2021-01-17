@@ -2,6 +2,9 @@ import * as React from 'react';
 import { Button, View, Text } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
+import Home from "./Home";
+import Settings from "./Settings";
+import Settings from "./Settings";
 
 function HomeScreen({ navigation }) {
   return (
@@ -21,7 +24,7 @@ function NotificationsScreen({ navigation }) {
 
 const Drawer = createDrawerNavigator();
 
-export default function drawer() {
+export default function DrawerNav() {
   return (
     <NavigationContainer>
       <Drawer.Navigator initialRouteName="Home">

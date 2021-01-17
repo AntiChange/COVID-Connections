@@ -21,8 +21,8 @@ function Register({ navigation }) {
 		e.preventDefault();
 
 		try {
-            //let response = await loginUser(dispatch, { username, password });
-            let response = await register(dispatch, { username: username, password: password, name: fullName });
+      let response = await register(dispatch, { username: username, password: password, name: fullName });
+      navigation.push("Login")
 
 		} catch (error) {
 			console.log(error);
