@@ -11,6 +11,7 @@ import Constants from 'expo-constants';
 import * as Animatable from 'react-native-animatable';
 import Collapsible from 'react-native-collapsible';
 import Accordion from 'react-native-collapsible/Accordion';
+import MyComponent from './components/AddConnection';
 
 
 const CONTENT = [
@@ -26,7 +27,6 @@ const CONTENT = [
     title: 'Billy Joe - Possible Contact',
     content: "Status: Sick, Self-isolating\n\nWeekly - Works at office\nJanuary 14th - Started to feel unwell\nJanuary 12th - Went to bar after work",
   },
- 
 ];
 
 
@@ -82,7 +82,7 @@ export default class App extends Component {
         <ScrollView contentContainerStyle={{ paddingTop: 30 }}>
           <Text style={styles.title}>Connections</Text>
 
-          
+          <MyComponent />
 
           
 
