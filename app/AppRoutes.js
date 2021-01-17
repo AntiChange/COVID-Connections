@@ -30,6 +30,8 @@ function AppRoutes() {
         ) : (
             <Stack.Screen name="Registry" component={Register} />,
             <Stack.Screen name="Login" component={Login} />
+            
+            
         )}
         </Stack.Navigator>
         </NavigationContainer>

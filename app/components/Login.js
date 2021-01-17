@@ -6,7 +6,9 @@ import 'react-native-gesture-handler';
 import UsernameField from './UsernameField';*/
 import { Button, TextInput } from 'react-native-paper';
 
+
 function Login({ navigation }) {
+    
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 
@@ -33,7 +35,7 @@ function Login({ navigation }) {
               
               <Text
                   style={{fontSize: 30}}
-                  >Covid Tracker++</Text>
+                  >COVID Connections</Text>
                 <Text></Text>
                 <TextInput
                 label="Username"
