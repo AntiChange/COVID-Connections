@@ -27,7 +27,7 @@ function AppRoutes() {
                 
                  />
         ) : (
-            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Login" component={Login} />
         )}
         </Stack.Navigator>
         </NavigationContainer>
