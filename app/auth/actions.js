@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwt_decode from "jwt-decode";
 
-const ROOT_URL = 'http://10.0.0.73:5000';
+const ROOT_URL = 'https://htn-21.herokuapp.com';
 const storageKey = "authToken";
  
 export async function loginUser(dispatch, loginPayload) {

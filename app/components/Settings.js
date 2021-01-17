@@ -6,7 +6,7 @@ function Toggle({on, title, id}) {
   const [text, setText] = useState(on)
   const [output, setOutput] = useState('Off')
   const [color, setColor] = useState('#3bd247')
-  const ROOT_URL = 'http://10.0.0.73:5000';
+  const ROOT_URL = 'https://htn-21.herokuapp.com';
 
   async function changeSetting() {
     

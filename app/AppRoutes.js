@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { useAuthState, useAuthDispatch, restoreToken } from './auth';
 
+const Stack = createStackNavigator();
 function AppRoutes() {
     
     async function getToken() {
@@ -20,7 +21,6 @@ function AppRoutes() {
     }, []);
 
     const userDetails = useAuthState();
-    const Stack = createStackNavigator();
 
 	return (
 		<NavigationContainer>
@@ -28,7 +28,7 @@ function AppRoutes() {
         {userDetails.token != null ? (
             <Stack.Screen name="Home" component={Home}/>
         ) : (
-            <Stack.Screen name="Registry" component={Register} />,
+            <Stack.Screen name="Register" component={Register} />,
             <Stack.Screen name="Login" component={Login} />
         )}
         </Stack.Navigator>
