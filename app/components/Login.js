@@ -63,7 +63,7 @@ function Login({ navigation }) {
                 backgroundColor = "#FFFFFFF"
                 style={(styles.button2)} 
                 //currently placeholder function
-                onPress={() => navigation.navigate("Register")}
+                onPress={() => navigation.push("Registry")}
                   > Register </Text>
               
             </View>
