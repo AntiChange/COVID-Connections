@@ -54,7 +54,7 @@ This project was built for [Hack the North 2020](https://devpost.com/software/ht
 
 ### Server
 
-SmartGarden requires at least version 14.x of [Node.js](https://nodejs.org/en/) (which comes with [npm](http://npmjs.com/)) installed on the server. Begin by installing and starting the server:
+COVID Connections requires at least version 14.x of [Node.js](https://nodejs.org/en/) (which comes with [npm](http://npmjs.com/)) installed on the server. Begin by installing and starting the server:
 
 ```cmd
 # Clone this repository
