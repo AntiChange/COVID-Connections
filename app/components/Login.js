@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { loginUser, useAuthState, useAuthDispatch } from '../auth';
-import { StyleSheet, Text, View, Dimensions, SafeAreaView, ScrollView, Button, Image } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, SafeAreaView, ScrollView} from 'react-native';
+import 'react-native-gesture-handler';
+/*import PasswordField from './PasswordField';
+import UsernameField from './UsernameField';*/
+import { Button, TextInput } from 'react-native-paper';
 
 function Login({ navigation }) {
 	const [username, setUsername] = useState('');
@@ -14,45 +18,142 @@ function Login({ navigation }) {
 
 		try {
             //let response = await loginUser(dispatch, { username, password });
-            let response = await loginUser(dispatch, { username: "e", password: "abc" });
+            let response = await loginUser(dispatch, { username: username, password: password });
 
 		} catch (error) {
 			console.log(error);
 		}
-	};
-
+    };
+    
 	return (
-		<View>
-			<Button onPress={handleLogin} title="login"/>
-		</View>
-	);
+        <SafeAreaView style={styles.container}>
+          <ScrollView style={styles.scrollView}>
+                  
+          <View style={styles.test}>
+              
+              <Text
+                  style={{fontSize: 30}}
+                  >Covid Tracker++</Text>
+                <Text></Text>
+                <TextInput
+                label="Username"
+                value={username}
+                onChangeText={username => setUsername(username)}
+                />
+                <Text></Text>
+                <TextInput
+                label="Password"
+                value={password}
+                onChangeText={password => setPassword(password)}
+                />
+                <Text></Text>
+      
+                <Text 
+                backgroundColor = "#FFFFFFF"
+                style={styles.button1} 
+                //currently placeholder function
+                onPress={handleLogin}
+                > Login </Text>
+      
+                <Text></Text>
+      
+                <Text 
+                backgroundColor = "#FFFFFFF"
+                style={styles.button2} 
+                //currently placeholder function
+                onPress={async () => {
+                  
+                }}
+                > Register </Text>
+              
+            </View>
+                  
+          </ScrollView>
+        </SafeAreaView>
+        );
 }
 
 export default Login;
 
-const styles = StyleSheet.create({
-	container: {
-        minHeight: "100vh",
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    formContainer: {
-        width: "200px"
-    },
-    error: {
 
+const styles = StyleSheet.create({
+    button1: {
+      backgroundColor: '#B19CD9',
+      alignItems: 'center',
+      padding: 10,
+      borderRadius: 16,
+      width: 62,
+      
+      justifyContent: 'center'
+      },
+
+  button2: {
+    backgroundColor: '#B19CD9',
+    alignItems: 'stretch',
+    padding: 10,
+    borderRadius: 16,
+    width: 80,
+    justifyContent: 'center'
     },
+
+  container: {
+    flex: 1,
+    paddingTop: 100,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  
+  scrollView: {
     
-    loginForm: {
-        display: "flex",
-        flexDirection: "column",
-    },
+  },
     
-    loginFormItem: {
-        display: "flex",
-        flexDirection: "column",
-        marginBottom: "10px"
-    }
-})
+  text: {
+      fontSize: 50,
+      fontWeight: 'bold'
+  },
+
+  textBox:  {
+    flex: 1,
+  },
+ 
+
+  
+  });
+
+
+  
+/*
+  const PasswordField = () => {
+    const [passwordText, setText] = React.useState('');
+  
+    
+    return (
+      <TextInput
+        label="Password"
+        value={passwordText}
+        onChangeText={passwordText => setText(passwordText)}
+        
+      />
+    );
+  };
+  
+  export default PasswordField;
+
+
+const UsernameField = () => {
+  const [usernameText, setText] = React.useState('');
+
+  return (
+    <TextInput
+      label="Username"
+      value={usernameText}
+      onChangeText={usernameText => setText(usernameText)}
+    />
+    
+  );
+  
+};
+
+export default UsernameField;
+*/
