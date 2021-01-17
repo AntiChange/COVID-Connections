@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <img src="https://user-images.githubusercontent.com/52430997/104851182-b7702300-58b0-11eb-85b5-3fa7a427b494.png" width="500">
+  <img src="https://user-images.githubusercontent.com/52430997/104851182-b7702300-58b0-11eb-85b5-3fa7a427b494.png" width="400">
   <br>
   COVID Connections
   <br>
