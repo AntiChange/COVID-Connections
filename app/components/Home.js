@@ -20,12 +20,12 @@ const CONTENT = [
     content: "Status: " + "Self-isolating, " + "Unvaccinated" + "\n\n" + "January 16th" + " - " + "Went to grocery store\nJanuary 14th - Went to friends birthday party\nJanuary 4th - Returned from Italy trip",
   },
   {
-    title: 'Billy Bob - Healthy',
-    content: "Status: Frontline Worker, Vaccinated\n\nWeekly - Works as Restaurant waiter\nJanuary 12th - Went to eat in nearby restaurant\nJanuary 1th - Celebrated with 2 friends",
-  },
-  {
     title: 'Billy Joe - Possible Contact',
     content: "Status: Sick, Self-isolating\n\nWeekly - Works at office\nJanuary 14th - Started to feel unwell\nJanuary 12th - Went to bar after work",
+  },
+  {
+    title: 'Billy Bob - Healthy',
+    content: "Status: Frontline Worker, Vaccinated\n\nWeekly - Works as Restaurant waiter\nJanuary 12th - Went to eat in nearby restaurant\nJanuary 1th - Celebrated with 2 friends",
   },
 ];
 
@@ -118,31 +118,31 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5FCFF',
     paddingTop: Constants.statusBarHeight,
+    paddingLeft: 30,
+    paddingRight: 30,
   },
   title: {
-    textAlign: 'center',
+    textAlign: 'left',
     fontSize: 30,
-    fontWeight: '300',
+    fontWeight: 'bold',
     marginBottom: 20,
   },
   header: {
     backgroundColor: '#F5FCFF',
-    padding: 10,
+    paddingTop: 30,
   },
   headerText: {
-    textAlign: 'center',
-    fontSize: 20,
-    fontWeight: '500',
+    textAlign: 'left',
+    fontSize: 20
   },
   content: {
-    padding: 20,
-    backgroundColor: '#fff',
+    paddingTop:10
   },
   active: {
-    backgroundColor: 'rgba(255,255,255,1)',
+    //backgroundColor: 'rgba(255,255,255,1)',
   },
   inactive: {
-    backgroundColor: 'rgba(245,252,255,1)',
+    //backgroundColor: 'rgba(245,252,255,1)',
   },
   selectors: {
     marginBottom: 10,
