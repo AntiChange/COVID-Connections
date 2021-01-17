@@ -26,14 +26,10 @@ The Android app is built in React Native, which authenticates users using JWT be
 
 This project was built for [Hack the North 2020](https://devpost.com/software/htn-21).
 
-## Screenshots
+## Demo
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/52430997/104851642-85ac8b80-58b3-11eb-80a8-6fb3800bb818.JPEG" alt="Screenshot 1" width="300px">
-  <img src="https://user-images.githubusercontent.com/52430997/104851938-2ea7b600-58b5-11eb-8870-64c22252ad9d.JPEG" alt="Screenshot 2" width="300px">
-  <img src="https://user-images.githubusercontent.com/52430997/104851629-70cff800-58b3-11eb-8d29-89a2f903f23c.JPEG" alt="Screenshot 3" width="300px">
-  <img src="https://user-images.githubusercontent.com/52430997/104851672-ad035880-58b3-11eb-9b2e-64b82e32efca.jpg" alt="Screenshot 4" width="300px">
-  <img src="https://user-images.githubusercontent.com/52430997/104851686-c99f9080-58b3-11eb-9add-2c49f57ce2e1.png" alt="Screenshot 5" width="300px">
+  <img src="https://user-images.githubusercontent.com/52430997/104854415-d330f480-58c3-11eb-935e-12083e043d9f.gif" alt="Demo" width="300px">
 </p>
 
 ## Features
