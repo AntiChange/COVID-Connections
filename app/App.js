@@ -7,6 +7,7 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import * as AppAuth from 'expo-app-auth';
 import { createStackNavigator } from '@react-navigation/stack';
+import UpdateStatus from './components/UpdateStatus';
 
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
@@ -27,12 +28,7 @@ export default function App({ navigation }) {
 /*
 export default function App() {
     return (
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name = "Login" component = {LoginScreen}/>
-          <Stack.Screen name = "Home" component = {HomeScreen}/>
-        </Stack.Navigator>
-      </NavigationContainer>
+      <UpdateStatus />
     );
 };
 
@@ -49,21 +45,21 @@ const LoginScreen = ({ navigation }) => {
   }, []);
 
   return (
-  
+
   <SafeAreaView style={styles.container}>
     <ScrollView style={styles.scrollView}>
-            
+
     <View style={styles.container}>
-        
+
         <Text
             style={{fontSize: 30}}
             >Covid Tracker++</Text>
           <Text></Text>
 
-          <Text 
+          <Text
           alignItems = 'cemter'
           backgroundColor = "#FFFFFFF"
-          style={styles.button} 
+          style={styles.button}
           onPress={async () => {
             const _authState = await signInAsync();
             setAuthState(_authState);
@@ -71,9 +67,9 @@ const LoginScreen = ({ navigation }) => {
             navigation.navigate('Home')
             }}
           > Sign in with Google </Text>
-        
+
       </View>
-            
+
     </ScrollView>
   </SafeAreaView>
   );
@@ -83,14 +79,14 @@ const HomeScreen = ({ navigation }) => {
   return (
     <SafeAreaView >
       <ScrollView style={styles.scrollView}>
-        <Text>You are on the home screen!</Text>   
+        <Text>You are on the home screen!</Text>
       </ScrollView>
     </SafeAreaView>
     );
   }
 
 
-  
+
 const styles = StyleSheet.create({
   button: {
     backgroundColor: '#8DFF50',
@@ -111,7 +107,7 @@ const styles = StyleSheet.create({
   scrollView: {
 
   },
-  
+
   text: {
     fontSize: 50,
     fontWeight: 'bold'
