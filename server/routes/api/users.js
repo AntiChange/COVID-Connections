@@ -5,15 +5,30 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
 
-// Protected route example
-router.get("/me", passport.authenticate('jwt', { session: false }), (req, res) => {
-    res.json(req.user);
+// // @route GET api/users/:username
+// @desc Get user by username
+// @access Private
+router.get("/:username", passport.authenticate('jwt', { session: false }), 
+async (req, res) => {
+    User.findOne(req.params.username)
+        .then(user => res.json(user))
+        .catch(err => res.status(400).json(err));
+});
+
+// // @route GET api/users/:id
+// @desc Get user by ID
+// @access Private
+router.get("/:id", passport.authenticate('jwt', { session: false }), 
+async (req, res) => {
+    User.findById(req.params.id)
+        .then(user => res.json(user))
+        .catch(err => res.status(400).json(err));
 });
 
 // @route POST api/users/register
 // @desc Register user
 // @access Public
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
 
   if (!req.body.username || !req.body.password) return res.status(404).json({ error: "Invalid username or password" });
   User.findOne({ username: req.body.username }).then(user => {
@@ -44,7 +59,7 @@ router.post("/register", (req, res) => {
 // @route POST api/users/login
 // @desc Login user and return JWT token
 // @access Public
-router.post("/login", (req, res) => {
+router.post("/login", async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
 
