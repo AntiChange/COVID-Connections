@@ -1,15 +1,17 @@
 import * as React from 'react';
 import { Button, TextInput } from 'react-native-paper';
 
+global.passwordText;
 const PasswordField = () => {
-  const [text, setText] = React.useState('');
+  const [passwordText, setText] = React.useState('');
 
-
+  
   return (
     <TextInput
       label="Password"
-      value={text}
-      onChangeText={text => setText(text)}
+      value={passwordText}
+      onChangeText={passwordText => setText(passwordText)}
+      
     />
   );
 };
