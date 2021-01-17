@@ -21,6 +21,7 @@ function AppRoutes() {
     }, []);
 
     const userDetails = useAuthState();
+    
 
 	return (
 		<NavigationContainer>
@@ -28,8 +29,11 @@ function AppRoutes() {
         {userDetails.token != null ? (
             <Stack.Screen name="Home" component={Home}/>
         ) : (
-            <Stack.Screen name="Register" component={Register} />,
-            <Stack.Screen name="Login" component={Login} />
+            <React.Fragment>
+            <Stack.Screen name="Login" component={Login} /><Stack.Screen name="Registry" component={Register} />
+            
+            </React.Fragment>
+            
             
             
         )}

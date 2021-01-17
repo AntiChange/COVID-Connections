@@ -12,6 +12,7 @@ import * as Animatable from 'react-native-animatable';
 import Collapsible from 'react-native-collapsible';
 import Accordion from 'react-native-collapsible/Accordion';
 import MyComponent from './AddConnection';
+import drawer from './drawer';
 
 
 const CONTENT = [
@@ -32,6 +33,7 @@ const CONTENT = [
 
 
 export default class Home extends Component {
+  drawer(){}
   state = {
     activeSections: [],
     collapsed: true,
@@ -78,6 +80,7 @@ export default class Home extends Component {
     const { multipleSelect, activeSections } = this.state;
 
     return (
+      
       <View style={styles.container}>
         <ScrollView contentContainerStyle={{ paddingTop: 30 }}>
           <Text style={styles.title}>Connections</Text>
