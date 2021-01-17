@@ -39,7 +39,7 @@ async (req, res) => {
                     user.save()
                         .then(user => {
                             let contacts2 = otherUser.contacts;
-                            contacts2.push({id: req.user.id});
+                            contacts2.push({id: req.user.id, type: req.body.contact.type});
                             otherUser.contacts = contacts2;
                             otherUser.save()
                                 .then(a => {

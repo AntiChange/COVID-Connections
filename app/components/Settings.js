@@ -1,27 +1,27 @@
 import React, {useEffect, useState } from 'react'
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, ToastAndroid, ActivityIndicator } from 'react-native';
+import { Modal, Portal, Provider } from 'react-native-paper';
 import { useAuthState } from '../auth';
+import Constants from 'expo-constants';
+
+const ROOT_URL = Constants.manifest.extra.serverUrl;
 
 function Toggle({on, title, id}) {
   const [text, setText] = useState(on)
-  const [output, setOutput] = useState('Off')
-  const [color, setColor] = useState('#3bd247')
-  const ROOT_URL = 'https://htn-21.herokuapp.com';
+  const userDetails = useAuthState();
 
-  async function changeSetting() {
-    
-    const userDetails = useAuthState();
-    let response = await fetch(`${ROOT_URL}/api/settings/edit-index`, {
+  async function changeSetting(isOn) {
+    fetch(`${ROOT_URL}/api/settings/edit-index`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + userDetails.token
+          'Authorization': userDetails.token
         },
-        body: JSON.stringify({index:id, setting: text})
-      });
-    let status = await response.json();
-    console.log(status);
+        body: JSON.stringify({index:id, setting: isOn})
+      })
+      .then(response => response.json())
+      .catch(err => console.log(err))
 
   }
   return (
@@ -29,7 +29,7 @@ function Toggle({on, title, id}) {
       <View style={{height:35, justifyContent: "center"}}><Text style={{color: "#777777", fontWeight: "bold"}}>{title}</Text></View>
       <TouchableOpacity
         style={{
-            backgroundColor: color,
+            backgroundColor: text==true? "#4dd256" : "#e64e4f",
             alignItems: 'center',
             padding: 10,
             borderRadius: 16,
@@ -38,48 +38,62 @@ function Toggle({on, title, id}) {
             justifyContent: 'center',
             marginBottom: 10
         }}
-        title={output}
         activeOpacity={0.6}
         onPress={() => {
           if (text == true) {
             setText(false)
-            setColor('#e64447')
-            setOutput('OFF')
-            changeSetting();
+            changeSetting(false);
           } else {
             setText(true)
-            setColor('#3bd247')
-            setOutput('ON')
-            changeSetting();
+            changeSetting(true);
           }
           
         }}>
-            <Text style={{color:"#fff", fontWeight: "bold"}}>{output}</Text>
+        <Text style={{color:"#fff", fontWeight: "bold"}}>{text==true? "ON" : "OFF"}</Text>
         </TouchableOpacity>
         </View>
   )
 }
 
 export default function Settings() {
-  const [initialSettings, setSettings] = useState([false, false, false, true, true]);
-  const ROOT_URL = 'http://10.0.0.73:5000';
+  const [initialSettings, setSettings] = useState(null);
+  const userDetails = useAuthState();
+
   async function getData() {
-    const userDetails = useAuthState();
-    let response = await fetch(`${ROOT_URL}/api/settings/`, {
+    fetch(`${ROOT_URL}/api/settings/`, {
         method: 'GET',
         headers: {
-          'Authorization': 'Bearer ' + userDetails.token
-        }});
-    let data = await response.json();
-    return data;
+          'Authorization': userDetails.token
+    }})
+      .then(response => response.json())
+      .then(data => {
+        setSettings(data);
+        console.log(data[0])
+      })
+      .catch(err => {
+        ToastAndroid.show("Error: " + err, ToastAndroid.SHORT);
+      })
   }
   useEffect(() => {
     getData()
-        .then(data => {
-            initialSettings = data;
-        })
-  }, [])
-  return (
+        .catch(err => console.log(err))
+  }, []);
+
+
+  return initialSettings == null ? (
+    <Provider>
+    <ScrollView style={styles.scrollView}>
+    <View style={styles.container}>
+      <Portal>
+        <Modal visible={true}>
+          <ActivityIndicator size={100} color="#B19CD9" animating={true} />
+        </Modal>
+      </Portal>
+      <Text style={styles.text}>Settings</Text>
+    </View>
+    </ScrollView>
+    </Provider>
+  ) : (
     <ScrollView style={styles.scrollView}>
     <View style={styles.container}>
       <Text style={styles.text}>Settings</Text>

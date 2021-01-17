@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
 import { NavigationContainer } from '@react-navigation/native';
@@ -12,19 +11,19 @@ import DrawerNav from "./components/DrawerNav";
 const Stack = createStackNavigator();
 function AppRoutes() {
     
+    const dispatch = useAuthDispatch();
     async function getToken() {
-        const dispatch = useAuthDispatch();
         await restoreToken(dispatch);
     }
 
     useEffect(() => {
-        getToken();
-        return;
+        getToken()
+            .then(()=>{return})
+            .catch(err=>console.log(err))
     }, []);
 
     const userDetails = useAuthState();
     
-
 	return (
 		<NavigationContainer independent={true}>
         <Stack.Navigator>
@@ -32,12 +31,8 @@ function AppRoutes() {
             <Stack.Screen name="COVID Connections" component={DrawerNav}/>
         ) : (
             <React.Fragment>
-            <Stack.Screen name="Login" component={Login} /><Stack.Screen name="Registry" component={Register} />
-            
+            <Stack.Screen name="Login" component={Login} /><Stack.Screen name="Register" component={Register} />  
             </React.Fragment>
-            
-            
-            
         )}
         </Stack.Navigator>
         </NavigationContainer>

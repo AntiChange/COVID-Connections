@@ -4,7 +4,7 @@ const passport = require("passport");
 const User = require("../../models/User");
 
 // // @route GET api/notifications/
-// @desc Get all settings
+// @desc Get all notifications
 // @access Private
 router.get("/", passport.authenticate('jwt', { session: false }), 
 async (req, res) => {
@@ -20,7 +20,9 @@ router.post("/add", passport.authenticate('jwt', { session: false }),
 async (req, res) => {
     User.findById(req.user.id)
         .then(user => {
-            user.notifications.push(req.body.notification);
+            let notifs = user.notifications;
+            notifs.push(user.notifications)
+            user.notifications = notifs;
             user.save()
                 .then(user => res.json(user.notifications))
                 .catch(err => res.status(400).json(err))

@@ -1,7 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwt_decode from "jwt-decode";
+import Constants from 'expo-constants';
 
-const ROOT_URL = 'https://htn-21.herokuapp.com';
+const ROOT_URL = Constants.manifest.extra.serverUrl;
 const storageKey = "authToken";
  
 export async function loginUser(dispatch, loginPayload) {
@@ -25,7 +26,7 @@ export async function loginUser(dispatch, loginPayload) {
       return data
     }
  
-    dispatch({ type: 'AUTH_ERROR', error: data.error[0] });
+    dispatch({ type: 'AUTH_ERROR', error: data.error });
     return;
   } catch (error) {
     dispatch({ type: 'AUTH_ERROR', error: error });
@@ -52,7 +53,7 @@ export async function register(dispatch, payload) {
       return true;
     }
  
-    dispatch({ type: 'AUTH_ERROR', error: data.error[0] });
+    dispatch({ type: 'AUTH_ERROR', error: status.error });
     return false;
   } catch (error) {
     dispatch({ type: 'AUTH_ERROR', error: error });
@@ -78,7 +79,7 @@ export async function restoreToken(dispatch) {
   }
   else {
     // Decode token and get user info and exp
-    const decoded = jwt_decode(token);
+    const decoded = jwt_decode(userToken);
 
     // Check for expired token
     const currentTime = Date.now() / 1000; // to get in milliseconds
@@ -87,8 +88,12 @@ export async function restoreToken(dispatch) {
       dispatch({ type: 'LOGOUT' });
     }
     else {
-      const data = {user: decoded, token: token};
+      const data = {user: decoded, token: userToken};
       dispatch({ type: 'LOGIN_SUCCESS', payload: data});
     }
   }
+}
+
+export async function doneError(dispatch) {
+  dispatch({ type: 'DONE_ERROR' });
 }

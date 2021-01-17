@@ -1,7 +1,3 @@
-import React, { useReducer } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-
 export const initialState = {
   userDetails: null,
   token: null,
@@ -15,6 +11,11 @@ export const AuthReducer = (initialState, action) => {
       return {
         ...initialState,
         loading: true
+      };
+    case "DONE_LOADING":
+      return {
+        ...initialState,
+        loading: false
       };
     case "LOGIN_SUCCESS":
       return {
@@ -40,6 +41,11 @@ export const AuthReducer = (initialState, action) => {
         ...initialState,
         loading: false,
         errorMessage: action.error
+      };
+    case "DONE_ERROR":
+      return {
+        ...initialState,
+        errorMessage: null
       };
  
     default:

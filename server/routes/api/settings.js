@@ -36,7 +36,9 @@ router.post("/edit-index", passport.authenticate('jwt', { session: false }),
 async (req, res) => {
     User.findById(req.user.id)
         .then(user => {
-            user.settings[req.body.index] = req.body.setting;
+            let settings = user.settings;
+            settings[req.body.index] = req.body.setting;
+            user.settings = settings;
             user.save()
                 .then(user => res.json(user.settings))
                 .catch(err => res.status(400).json(err))

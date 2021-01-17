@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import {TouchableOpacity, TextInput, ScrollView, Button, Keyboard, Picker, StyleSheet, Text, View, ScrollViewBase } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import {TouchableOpacity, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Picker } from '@react-native-community/picker';
 import Tags from "react-native-tags";
 
 export default function UpdateStatus() {
@@ -9,16 +9,18 @@ export default function UpdateStatus() {
     const [needs, setNeeds] = useState(["Groceries", "Friend"]); //should get pulled from DB, they are mutable and saved
     // const [needsField, setNeedsField] = useState(""); //dont touch this
     const [dailyActivities, setDailyActivities] = useState(["Grocery Shopping"]); //Append these to DB with current day as timestamp
+
+    
     return (
         <ScrollView>
-            <View style={{marginStart: 30, marginEnd: 30}}>
+            <View style={{marginStart: 25, marginEnd: 30, marginBottom:100}}>
                 <View style={styles.container}>
-                    <Text style={styles.header}>Update your Status</Text>
+                    <Text style={styles.header}>Update Your Status</Text>
                 </View>
                 <View>
                     <Text style={styles.sectionHeader}>COVID-19 Exposure</Text>
 
-                    <Text style={styles.sectionText}>To the best of your knowledge which of the following describes your exposure to COVID-19</Text>
+                    {/* <Text style={styles.sectionText}>To the best of your knowledge which of the following describes your exposure to COVID-19</Text> */}
                     <View style={styles.pickerWrapper}>
                         <Picker
                             selectedValue={exposureSelectedValue}
@@ -36,11 +38,12 @@ export default function UpdateStatus() {
                 <View>
                     <Text style={styles.sectionHeader}>Isolation Status</Text>
 
-                    <Text style={styles.sectionText}>Are you currently self-isolating?</Text>
+                    {/* <Text style={styles.sectionText}>Are you currently self-isolating?</Text> */}
                     <View style={styles.pickerWrapper}>
                         <Picker
                             selectedValue={isolationSelectedValue}
                             style={styles.picker}
+                            dropdownIconColor={"black"}
                             onValueChange={(itemValue, itemIndex) => setIsolationSelectedValue(itemValue)}
                         >
                             <Picker.Item label="No" value="isolationFalse" />
@@ -52,9 +55,9 @@ export default function UpdateStatus() {
                 <View>
                     <Text style={styles.sectionHeader}>Do you need a hand with anything?</Text>
 
-                    <Text style={styles.sectionText}>Enter the kinds of things you feel you might need a hand with, the connections
+                    {/* <Text style={styles.sectionText}>Enter the kinds of things you feel you might need a hand with, the connections
                     you have with the appropriate permissions will be able to see these and could reach out to you. Tap on items below to
-                    remove them from your list</Text>
+                    remove them from your list</Text> */}
 
                     {/* <TextInput
                         style={{ paddingStart: 12, width : 120, height: 40, borderColor: 'gray', borderWidth: 1 }}
@@ -73,7 +76,7 @@ export default function UpdateStatus() {
                             console.log(index, tagLabel, event, deleted ? "deleted" : "not deleted")
                         }
                         containerStyle={{ justifyContent: "flex-start" }}
-                        inputStyle={{  borderWidth: 2, borderColor: "black" , backgroundColor: "white" }}
+                        inputStyle={{  borderWidth: 2, borderRadius:25, borderColor: "#B19CD9" , backgroundColor: "white" }}
                         renderTag={({ tag, index, onPress, deleteTagOnPress, readonly }) => (
                         <TouchableOpacity key={`${tag}-${index}`} onPress={onPress}>
                             <Text style={styles.tag}>{tag}</Text>
@@ -92,7 +95,7 @@ export default function UpdateStatus() {
                     <Tags
                         initialText=""
                         textInputProps={{
-                        placeholder: "What was the activity?"
+                        placeholder: "Activity"
                         }}
                         initialTags={dailyActivities}
                         onChangeTags={tags => console.log(tags)}
@@ -100,7 +103,7 @@ export default function UpdateStatus() {
                             console.log(index, tagLabel, event, deleted ? "deleted" : "not deleted")
                         }
                         containerStyle={{ justifyContent: "flex-start" }}
-                        inputStyle={{  borderWidth: 2, borderColor: "black" , backgroundColor: "white" }}
+                        inputStyle={{  borderWidth: 2, borderRadius:25, borderColor: "#B19CD9" , backgroundColor: "white" }}
                         renderTag={({ tag, index, onPress, deleteTagOnPress, readonly }) => (
                         <TouchableOpacity key={`${tag}-${index}`} onPress={onPress}>
                             <Text style={styles.tag}>{tag}</Text>
@@ -118,48 +121,54 @@ export default function UpdateStatus() {
 
 const styles = StyleSheet.create({
     container: {
-        // backgroundColor: '#4c69a5',
         flex: 1,
-        paddingTop: 45,
-        // backgroundColor: '#F5FCFF',
+        paddingTop: 30,
     },
     header: {
-        fontSize: 25,
-        // textAlign: 'center',
+        fontSize: 35,
         margin: 10,
+        marginBottom:0,
         fontWeight: 'bold'
     },
 
     sectionHeader: {
-        fontSize: 22,
+        fontSize: 18,
         textAlign: 'left',
-        margin: 10,
-        fontWeight: 'bold'
+        marginLeft: 10,
+        marginTop: 30,
+        marginBottom:10,
+        fontWeight: 'bold',
     },
 
     sectionText: {
         fontSize: 14,
         textAlign: 'left',
         margin: 10,
+        marginTop:0,
+        color: "#777777", 
     },
 
     pickerWrapper: {
-        // justifyContent: 'center',
-        // alignItems: 'center'
-        paddingStart: 10
+        marginLeft: 10,
+        marginRight: 10,
+        paddingStart:10,
+        borderRadius: 10,
+        backgroundColor:"#B19CD9"
     },
 
     picker: {
-        height: 50,
-        width: 250
+        height: 40,
+        width: 300,
+        fontSize: 14,
     },
 
     tag: {
-        backgroundColor: "grey",
+        backgroundColor: "#B19CD9",
         margin: 5,
-        borderRadius: 5,
-        paddingStart: 5,
-        paddingEnd: 5,
-        // textAlign: "left";
+        borderRadius: 25,
+        paddingLeft: 15,
+        paddingRight: 15,
+        paddingTop: 5,
+        paddingBottom: 5,
     }
 })
