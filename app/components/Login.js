@@ -36,11 +36,17 @@ function Login({ navigation }) {
               <Text
                   style={{fontSize: 30}}
                   >COVID Connections</Text>
-                <Text></Text>
+                <Text style={{marginBottom:20, marginTop: 15}}>
+                <Text>Don't have an account? </Text>
+                <Text 
+                  style={{color:"#B19CD9"}}
+                  onPress={() => navigation.push("Registry")}
+                    > Register </Text></Text>
+
                 <TextInput
-                label="Username"
-                value={username}
-                onChangeText={username => setUsername(username)}
+                  label="Username"
+                  value={username}
+                  onChangeText={username => setUsername(username)}
                 />
                 <Text></Text>
                 <TextInput
@@ -53,18 +59,10 @@ function Login({ navigation }) {
                 <Text 
                 backgroundColor = "#FFFFFFF"
                 style={styles.button1} 
-                //currently placeholder function
                 onPress={handleLogin}
                 > Login </Text>
       
                 <Text></Text>
-      
-                <Text 
-                backgroundColor = "#FFFFFFF"
-                style={(styles.button2)} 
-                //currently placeholder function
-                onPress={() => navigation.push("Registry")}
-                  > Register </Text>
               
             </View>
                   

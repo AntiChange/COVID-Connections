@@ -33,11 +33,11 @@ function Register({ navigation }) {
         <SafeAreaView style={styles.container}>
           <ScrollView style={styles.scrollView}>
                   
-          <View style={styles.test}>
+          <View>
               
               <Text
                   style={{fontSize: 30}}
-                  >Register new Account</Text>
+                  >Register</Text>
                 <Text></Text>
                 <TextInput
                 label="Username"
@@ -63,7 +63,7 @@ function Register({ navigation }) {
                 style={styles.button3} 
                 //currently placeholder function
                 onPress={handleRegister}
-                > Complete Registration </Text>
+                >Register</Text>
       
                 <Text></Text>
       
@@ -80,17 +80,15 @@ export default Register;
 
 
 const styles = StyleSheet.create({
-    button3: {
-      backgroundColor: '#B19CD9',
-      alignItems: 'center',
-      padding: 10,
-      borderRadius: 16,
-      width: 170,
-      
-      justifyContent: 'center'
-      },
-
-  
+  button3: {
+    backgroundColor: '#B19CD9',
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 16,
+    width: 170,
+    textAlign:"center",
+    justifyContent: 'center'
+  },
 
   container: {
     flex: 1,

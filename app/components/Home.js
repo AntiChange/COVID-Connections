@@ -118,7 +118,7 @@ export default class Home extends Component {
             backgroundColor = "#FFFFFFF"
             style={styles.button1} 
             //currently placeholder function
-            onPress={handleLogout}
+            onPress={this.handleLogout}
             > Log Out </Text>
         </ScrollView>
       </View>
