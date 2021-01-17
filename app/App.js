@@ -1,15 +1,20 @@
-import React from 'react';
+
 import { AuthProvider } from "./auth";
 import AppRoutes from './AppRoutes'
 
-import {
-  StyleSheet,
-} from 'react-native';
+
 import Constants from 'expo-constants';
+
+import React, { useEffect, useState } from 'react';
+import {  StyleSheet, Text, View, Dimensions, SafeAreaView, ScrollView, Button, Image } from 'react-native';
+import 'react-native-gesture-handler';
+
+
+
+
 
 
 export default function App({ navigation }) {
-
   return (
     <AuthProvider>
     <AppRoutes />
@@ -24,3 +29,27 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight,
   },
 });
+/*
+export default function App() {
+  return (
+    <View style={styles.container}>
+      <LoginScreen />
+    </View>
+  );
+}
+
+
+
+  
+
+
+  const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 100,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  });
+*/
