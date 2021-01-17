@@ -9,7 +9,8 @@ const User = require("../../models/User");
 router.get("/", passport.authenticate('jwt', { session: false }), 
 async (req, res) => {
     User.findById(req.user.id)
-        .then(user => res.json(user.settings))
+        .then(user => {
+            res.json(user.settings)})
         .catch(err => res.status(400).json(err));
 });
 
@@ -21,6 +22,21 @@ async (req, res) => {
     User.findById(req.user.id)
         .then(user => {
             user.settings = req.body.settings;
+            user.save()
+                .then(user => res.json(user.settings))
+                .catch(err => res.status(400).json(err))
+        })
+        .catch(err => res.status(400).json(err));
+});
+
+// // @route POST api/settings/edit-index
+// @desc Edit specific setting
+// @access Private
+router.post("/edit-index", passport.authenticate('jwt', { session: false }), 
+async (req, res) => {
+    User.findById(req.user.id)
+        .then(user => {
+            user.settings[req.body.index] = req.body.setting;
             user.save()
                 .then(user => res.json(user.settings))
                 .catch(err => res.status(400).json(err))

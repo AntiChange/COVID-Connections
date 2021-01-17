@@ -14,7 +14,10 @@ function AppRoutes() {
         await restoreToken(dispatch);
     }
 
-    useEffect(() => {getToken();}, []);
+    useEffect(() => {
+        getToken();
+        return;
+    }, []);
 
     const userDetails = useAuthState();
     const Stack = createStackNavigator();
