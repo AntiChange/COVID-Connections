@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {  StyleSheet, Text, View, Dimensions, SafeAreaView, ScrollView, Button, Image } from 'react-native';
 import 'react-native-gesture-handler';
+import PasswordField from './components/PasswordField';
+import UsernameField from './components/UsernameField';
 
 
 
@@ -11,13 +13,15 @@ export default function App() {
   <SafeAreaView style={styles.container}>
     <ScrollView style={styles.scrollView}>
             
-    <View style={styles.container}>
+    <View style={styles.test}>
         
         <Text
             style={{fontSize: 30}}
             >Covid Tracker++</Text>
           <Text></Text>
+          <UsernameField />
           <Text></Text>
+          <PasswordField/>
           <Text></Text>
 
           <Text 
@@ -29,7 +33,7 @@ export default function App() {
           }}
           > Login </Text>
 
-          
+          <Text></Text>
 
           <Text 
           backgroundColor = "#FFFFFFF"
@@ -50,42 +54,50 @@ export default function App() {
 
 
   
-const styles = StyleSheet.create({
-button1: {
-  backgroundColor: '#8DFF50',
-  alignItems: 'center',
-  padding: 10,
-  borderRadius: 16,
-  width: 63,
-  justifyContent: 'center'
-  },
 
-button2: {
-  backgroundColor: '#8DFF50',
-  alignItems: 'center',
-  padding: 10,
-  borderRadius: 16,
-  width: 80,
-  justifyContent: 'center'
-  },
-  
-container: {
-  flex: 1,
-  paddingTop: 100,
-  backgroundColor: '#fff',
-  alignItems: 'center',
-  justifyContent: 'center',
-  },
 
-scrollView: {
+  const styles = StyleSheet.create({
+    button1: {
+      backgroundColor: '#B19CD9',
+      alignItems: 'center',
+      padding: 10,
+      borderRadius: 16,
+      width: 62,
+      
+      justifyContent: 'center'
+      },
+
+  button2: {
+    backgroundColor: '#B19CD9',
+    alignItems: 'stretch',
+    padding: 10,
+    borderRadius: 16,
+    width: 80,
+    justifyContent: 'center'
+    },
+
+  container: {
     flex: 1,
-    paddingBottom: 30,
+    paddingTop: 100,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   
-  text: {
-    fontSize: 50,
-    fontWeight: 'bold'
+  scrollView: {
     
-  }
-});
+  },
+    
+  text: {
+      fontSize: 50,
+      fontWeight: 'bold'
+  },
+
+  textBox:  {
+    flex: 1,
+  },
+ 
+
+  
+  });
 
