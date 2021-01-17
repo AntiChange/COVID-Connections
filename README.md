@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  <a href="#overview">Overview</a> • <a href="#screenshots">Screenshots</a> • <a href="#features">Features</a> • <a href="#installation">Installation</a> • <a href="#authors">Authors</a> • <a href="#license">License</a>
+  <a href="#overview">Overview</a> • <a href="#demo">Demo</a> • <a href="#features">Features</a> • <a href="#installation">Installation</a> • <a href="#authors">Authors</a> • <a href="#license">License</a>
 </p>
 
 ## Overview
