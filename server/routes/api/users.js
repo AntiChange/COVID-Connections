@@ -15,13 +15,14 @@ router.get("/me", passport.authenticate('jwt', { session: false }), (req, res) =
 // @access Public
 router.post("/register", (req, res) => {
 
-  User.findOne({ email: req.body.email }).then(user => {
+  if (!req.body.username || !req.body.password) return res.status(404).json({ error: "Invalid username or password" });
+  User.findOne({ username: req.body.username }).then(user => {
       if (user) {
-          return res.status(400).json({ email: "Email already exists" });
+          return res.status(400).json({ error: "Username already exists" });
       } else {
           const newUser = new User({
               name: req.body.name,
-              email: req.body.email,
+              username: req.body.username,
               password: req.body.password
           });
           // Hash password before saving in database
@@ -44,15 +45,16 @@ router.post("/register", (req, res) => {
 // @desc Login user and return JWT token
 // @access Public
 router.post("/login", (req, res) => {
-
-  const email = req.body.email;
+  const username = req.body.username;
   const password = req.body.password;
 
-  // Find user by email
-  User.findOne({ email }).then(user => {
+  if (!username || !password) return res.status(404).json({ error: "Invalid username or password" });
+
+  // Find user by username
+  User.findOne({ username }).then(user => {
   // Check if user exists
   if (!user) {
-      return res.status(404).json({ emailnotfound: "Email not found" });
+      return res.status(404).json({ error: "Username not found" });
   }
 
   // Check password
@@ -62,7 +64,7 @@ router.post("/login", (req, res) => {
           const payload = {
               id: user.id,
               name: user.name,
-              email: user.email
+              username: user.username
           };
           // Sign token
           jwt.sign(
@@ -78,7 +80,7 @@ router.post("/login", (req, res) => {
                     user.token = token;
                     user.save()
                         .then(user => res.json({
-                          success: true,
+                          user: user,
                           token: "Bearer " + token
                         }))
                         .catch(err => console.log(err))
@@ -86,7 +88,7 @@ router.post("/login", (req, res) => {
               }
           );
       } else {
-          return res.status(400).json({ passwordincorrect: "Password incorrect" });
+          return res.status(400).json({ error: "Password incorrect" });
       }
   });
   });

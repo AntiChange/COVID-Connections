@@ -1,16 +1,30 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { render } from 'react-dom';
-import { AsyncStorage, StyleSheet, Text, View, Dimensions, SafeAreaView, ScrollView, Button, Image } from 'react-native';
+//import { AsyncStorage, StyleSheet, Text, View, Dimensions, SafeAreaView, ScrollView, Button, Image } from 'react-native';
 import Authenticator from './components/Authenticator';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import * as AppAuth from 'expo-app-auth';
 import { createStackNavigator } from '@react-navigation/stack';
 
+import Dashboard from './components/Dashboard';
+import Login from './components/Login';
+import { AuthProvider } from "./auth";
+import AppRoutes from './AppRoutes'
+
 const Stack = createStackNavigator();
 
+export default function App({ navigation }) {
 
+  return (
+    <AuthProvider>
+    <AppRoutes />
+    </AuthProvider>
+  );
+}
+
+/*
 export default function App() {
     return (
       <NavigationContainer>
@@ -108,7 +122,7 @@ const styles = StyleSheet.create({
 let config = {
   issuer: 'https://accounts.google.com',
   scopes: ['openid', 'profile'],
-  /* This is the CLIENT_ID generated from a Firebase project */
+  // This is the CLIENT_ID generated from a Firebase project
   clientId: '603386649315-vp4revvrcgrcjme51ebuhbkbspl048l9.apps.googleusercontent.com',
 };
 
@@ -166,5 +180,5 @@ export async function signOutAsync({ accessToken }) {
     alert(`Failed to revoke token: ${e.message}`);
   }
   global.isSignedIn = false;
-}
+}*/
 
