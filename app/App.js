@@ -1,82 +1,59 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
-import { render } from 'react-dom';
+import React, {useEffect, useState } from 'react'
 import { AsyncStorage, StyleSheet, Text, View, Dimensions, SafeAreaView, ScrollView, Button, Image } from 'react-native';
-import Authenticator from './components/Authenticator';
-import 'react-native-gesture-handler';
-import { NavigationContainer } from '@react-navigation/native';
-import * as AppAuth from 'expo-app-auth';
-import { createStackNavigator } from '@react-navigation/stack';
-
-const Stack = createStackNavigator();
 
 
-export default function App() {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name = "Login" component = {LoginScreen}/>
-          <Stack.Screen name = "Home" component = {HomeScreen}/>
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
-};
-
-const LoginScreen = ({ navigation }) => {
-  let [authState, setAuthState] = useState(null);
-
-  useEffect(() => {
-    (async () => {
-      let cachedAuth = await getCachedAuthAsync();
-      if (cachedAuth && !authState) {
-        setAuthState(cachedAuth);
-      }
-    })();
-  }, []);
-
+function Toggle({title}) {
+  const [text, setText] = useState('Off')
   return (
-  
-  <SafeAreaView style={styles.container}>
-    <ScrollView style={styles.scrollView}>
-            
-    <View style={styles.container}>
-        
-        <Text
-            style={{fontSize: 30}}
-            >Covid Tracker++</Text>
-          <Text></Text>
-
-          <Text 
-          alignItems = 'cemter'
-          backgroundColor = "#FFFFFFF"
-          style={styles.button} 
-          onPress={async () => {
-            const _authState = await signInAsync();
-            setAuthState(_authState);
-            console.log("This has run!")
-            navigation.navigate('Home')
-            }}
-          > Sign in with Google </Text>
-        
-      </View>
-            
-    </ScrollView>
-  </SafeAreaView>
-  );
+    <View style={styles.button}>
+      <View >
+      <Button style={styles.button}
+        title={title}
+        onPress={() => {
+          if (text == 'On') {
+            setText('Off')
+            console.log(`${title}`, false)
+          } else {
+            setText('On')
+            console.log(`${title}`, true)
+          }
+          
+        }}
+      />
+      <Text style={styles.button}>{`${title} is ${text}`}</Text>
+    </View>
+    </View>
+  )
 }
 
-const HomeScreen = ({ navigation }) => {
+export default function App() {
+  const getAllLogs = async () => {
+    const url = logURL;
+    try {
+        return fetch(url, { method: "GET", })
+            .then((response) => response.json())
+            .then((logs) => {
+                return logs;
+            })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
   return (
-    <SafeAreaView >
-      <ScrollView style={styles.scrollView}>
-        <Text>You are on the home screen!</Text>   
-      </ScrollView>
-    </SafeAreaView>
-    );
-  }
+    <ScrollView style={styles.scrollView}>
+    <View style={styles.container}>
+      <Text style={styles.text}>Settings</Text>
+      <Toggle title="Show Status to Close Contacts" />
+      <Toggle title="Show Status to Other Contacts"/>
+      <Toggle title="Show Status to Non-Contacts"/>
+      <Toggle title="Hide My Connections"/>
+      <Toggle title="Hide Me From Other's Connections List"/>
+    </View>
+    </ScrollView>
+  )
+}
 
-
-  
 const styles = StyleSheet.create({
   button: {
     backgroundColor: '#8DFF50',
@@ -84,7 +61,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 16,
     width: 150,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginBottom: 10
  },
   container: {
   flex: 1,
@@ -103,68 +81,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   }
 });
-
-
-let config = {
-  issuer: 'https://accounts.google.com',
-  scopes: ['openid', 'profile'],
-  /* This is the CLIENT_ID generated from a Firebase project */
-  clientId: '603386649315-vp4revvrcgrcjme51ebuhbkbspl048l9.apps.googleusercontent.com',
-};
-
-let StorageKey = '@MyApp:CustomGoogleOAuthKey';
-
-
-
-export async function signInAsync() {
-  let authState = await AppAuth.authAsync(config);
-  await cacheAuthAsync(authState);
-  console.log('signInAsync', authState);
-  global.isSignedIn = true;
-  console.log("This has run!");
-  return authState;
-}
-
-async function cacheAuthAsync(authState) {
-  return await AsyncStorage.setItem(StorageKey, JSON.stringify(authState));
-}
-
-export async function getCachedAuthAsync() {
-  let value = await AsyncStorage.getItem(StorageKey);
-  let authState = JSON.parse(value);
-  console.log('getCachedAuthAsync', authState);
-  if (authState) {
-    if (checkIfTokenExpired(authState)) {
-      return refreshAuthAsync(authState);
-    } else {
-      return authState;
-    }
-  }
-  return null;
-}
-
-function checkIfTokenExpired({ accessTokenExpirationDate }) {
-  return new Date(accessTokenExpirationDate) < new Date();
-}
-
-async function refreshAuthAsync({ refreshToken }) {
-  let authState = await AppAuth.refreshAsync(config, refreshToken);
-  console.log('refreshAuth', authState);
-  await cacheAuthAsync(authState);
-  return authState;
-}
-
-export async function signOutAsync({ accessToken }) {
-  try {
-    await AppAuth.revokeAsync(config, {
-      token: accessToken,
-      isClientIdProvided: true,
-    });
-    await AsyncStorage.removeItem(StorageKey);
-    return null;
-  } catch (e) {
-    alert(`Failed to revoke token: ${e.message}`);
-  }
-  global.isSignedIn = false;
-}
-
