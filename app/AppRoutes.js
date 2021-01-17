@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Dashboard from './components/Dashboard';
+import Home from './components/Home';
 import Login from './components/Login';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -22,7 +22,7 @@ function AppRoutes() {
 		<NavigationContainer>
         <Stack.Navigator>
         {userDetails.token != null ? (
-            <Stack.Screen name="Dashboard" component={Dashboard} />
+            <Stack.Screen name="Home" component={Home} />
         ) : (
             <Stack.Screen name="Login" component={Login} />
         )}
