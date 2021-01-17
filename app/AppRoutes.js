@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Home from './components/Home';
 import Login from './components/Login';
+import LoginScreen from './components/LoginScreen'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -26,7 +27,7 @@ function AppRoutes() {
                 
                  />
         ) : (
-            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Login" component={LoginScreen} />
         )}
         </Stack.Navigator>
         </NavigationContainer>
