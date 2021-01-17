@@ -19,6 +19,10 @@ app.use(bodyParser.json());
 
 // Routes
 const users = require("./routes/api/users");
+const activities = require("./routes/api/activities");
+const contacts = require("./routes/api/contacts");
+const notifications = require("./routes/api/notifications");
+const settings = require("./routes/api/settings");
 
 // Mongo Atlas Config
 const uri = process.env.MONGO_URI;
@@ -38,6 +42,10 @@ require("./config/passport")(passport);
 
 // Routes
 app.use("/api/users", users);
+app.use("/api/activities", activities);
+app.use("/api/contacts", contacts);
+app.use("/api/notifications", notifications);
+app.use("/api/settings", settings);
 
 app.listen(serverPort, () => {
   console.log(`Server is running on port ${serverPort}`);
