@@ -96,9 +96,10 @@ export default function Settings() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 100,
+    paddingTop: 50,
     paddingLeft: 30,
     paddingRight: 30,
+    paddingBottom: 90,
     backgroundColor: '#fff',
     alignItems: 'flex-start',
     justifyContent: 'center',

@@ -7,6 +7,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { useAuthState, useAuthDispatch, restoreToken } from './auth';
 
+import DrawerNav from "./components/DrawerNav";
+
 const Stack = createStackNavigator();
 function AppRoutes() {
     
@@ -24,10 +26,10 @@ function AppRoutes() {
     
 
 	return (
-		<NavigationContainer>
+		<NavigationContainer independent={true}>
         <Stack.Navigator>
         {userDetails.token != null ? (
-            <Stack.Screen name="Home" component={Home}/>
+            <Stack.Screen name="COVID Connections" component={DrawerNav}/>
         ) : (
             <React.Fragment>
             <Stack.Screen name="Login" component={Login} /><Stack.Screen name="Registry" component={Register} />

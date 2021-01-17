@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import {
   Switch,
   ScrollView,
@@ -32,29 +32,26 @@ const CONTENT = [
 
 
 
-export default class Home extends Component {
-  state = {
-    activeSections: [],
-    collapsed: true,
-    multipleSelect: false,
-  };
+export default function Home() {
+  const [activeSections, setActiveSections] = useState([]);
+  const [collapsed, setCollapsed] = useState(true);
+  const multipleSelect = false;
 
-  handleLogout = () => {
-    const dispatch = useAuthDispatch();
+  const dispatch = useAuthDispatch();
+
+  function handleLogout() {
 		logout(dispatch);
 	};
 
-  toggleExpanded = () => {
-    this.setState({ collapsed: !this.state.collapsed });
+  function toggleExpanded() {
+    setCollapsed(!collapsed);
   };
 
-  setSections = sections => {
-    this.setState({
-      activeSections: sections.includes(undefined) ? [] : sections,
-    });
+  function setSections(sections) {
+    setActiveSections(sections.includes(undefined) ? [] : sections)
   };
 
-  renderHeader = (section, _, isActive) => {
+  function renderHeader(section, _, isActive) {
     return (
       <Animatable.View
         duration={400}
@@ -66,7 +63,7 @@ export default class Home extends Component {
     );
   };
 
-  renderContent(section, _, isActive) {
+  function renderContent(section, _, isActive) {
     return (
       <Animatable.View
         duration={400}
@@ -79,51 +76,46 @@ export default class Home extends Component {
       </Animatable.View>
     );
   }
+  return (
+    
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={{ paddingTop: 30 }}>
+        <Text style={styles.title}>Contacts</Text>
 
-  render() {
-    const { multipleSelect, activeSections } = this.state;
+        <MyComponent />
 
-    return (
-      
-      <View style={styles.container}>
-        <ScrollView contentContainerStyle={{ paddingTop: 30 }}>
-          <Text style={styles.title}>Contacts</Text>
+        
 
-          <MyComponent />
-
+        <TouchableOpacity onPress={toggleExpanded}>
           
-
-          <TouchableOpacity onPress={this.toggleExpanded}>
-            
-          </TouchableOpacity>
-          <Collapsible collapsed={this.state.collapsed} align="center">
-            <View style={styles.content}>
-              <Text>
-                Bacon ipsum dolor amet chuck turducken landjaeger tongue spare
-                ribs
-              </Text>
-            </View>
-          </Collapsible>
-          <Accordion
-            activeSections={activeSections}
-            sections={CONTENT}
-            touchableComponent={TouchableOpacity}
-            expandMultiple={multipleSelect}
-            renderHeader={this.renderHeader}
-            renderContent={this.renderContent}
-            duration={400}
-            onChange={this.setSections}
-          />
-          <Text 
-            backgroundColor = "#FFFFFFF"
-            style={styles.button1} 
-            //currently placeholder function
-            onPress={this.handleLogout}
-            > Log Out </Text>
-        </ScrollView>
-      </View>
-    );
-  }
+        </TouchableOpacity>
+        <Collapsible collapsed={collapsed} align="center">
+          <View style={styles.content}>
+            <Text>
+              Bacon ipsum dolor amet chuck turducken landjaeger tongue spare
+              ribs
+            </Text>
+          </View>
+        </Collapsible>
+        <Accordion
+          activeSections={activeSections}
+          sections={CONTENT}
+          touchableComponent={TouchableOpacity}
+          expandMultiple={multipleSelect}
+          renderHeader={renderHeader}
+          renderContent={renderContent}
+          duration={400}
+          onChange={setSections}
+        />
+        <Text 
+          backgroundColor = "#FFFFFFF"
+          style={styles.button1} 
+          //currently placeholder function
+          onPress={handleLogout}
+          > Log Out </Text>
+      </ScrollView>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

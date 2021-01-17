@@ -38,7 +38,14 @@ function Register({ navigation }) {
               <Text
                   style={{fontSize: 30}}
                   >Register</Text>
-                <Text></Text>
+
+                <Text style={{marginBottom:20, marginTop: 15}}>
+                <Text>Have an account? </Text>
+                <Text 
+                  style={{color:"#B19CD9"}}
+                  onPress={() => navigation.push("Login")}
+                    > Login</Text></Text>
+
                 <TextInput
                 label="Username"
                 value={username}
@@ -66,9 +73,7 @@ function Register({ navigation }) {
                 >Register</Text>
       
                 <Text></Text>
-      
-                
-              
+    
             </View>
                   
           </ScrollView>
@@ -99,18 +104,13 @@ const styles = StyleSheet.create({
   },
   
   scrollView: {
-    
+
   },
-    
   text: {
       fontSize: 50,
       fontWeight: 'bold'
   },
-
   textBox:  {
     flex: 1,
-  },
- 
-
-  
-  });
+  }
+});

@@ -80,19 +80,10 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       padding: 10,
       borderRadius: 16,
-      width: 62,
-      
+      width: 170,
+      textAlign: "center",
       justifyContent: 'center'
       },
-
-  button2: {
-    backgroundColor: '#B19CD9',
-    alignItems: 'stretch',
-    padding: 10,
-    borderRadius: 16,
-    width: 80,
-    justifyContent: 'center'
-    },
 
   container: {
     flex: 1,
