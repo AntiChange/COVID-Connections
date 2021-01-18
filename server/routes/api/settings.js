@@ -15,32 +15,15 @@ async (req, res) => {
 });
 
 // // @route POST api/settings/edit
-// @desc Edit settings
+// @desc Edit specific setting
 // @access Private
 router.post("/edit", passport.authenticate('jwt', { session: false }), 
 async (req, res) => {
     User.findById(req.user.id)
         .then(user => {
-            user.settings = req.body.settings;
+            user.settings.set(req.body.index, req.body.setting);
             user.save()
-                .then(user => res.json(user.settings))
-                .catch(err => res.status(400).json(err))
-        })
-        .catch(err => res.status(400).json(err));
-});
-
-// // @route POST api/settings/edit-index
-// @desc Edit specific setting
-// @access Private
-router.post("/edit-index", passport.authenticate('jwt', { session: false }), 
-async (req, res) => {
-    User.findById(req.user.id)
-        .then(user => {
-            let settings = user.settings;
-            settings[req.body.index] = req.body.setting;
-            user.settings = settings;
-            user.save()
-                .then(user => res.json(user.settings))
+                .then(userUpdated => res.json(userUpdated.settings))
                 .catch(err => res.status(400).json(err))
         })
         .catch(err => res.status(400).json(err));
@@ -55,7 +38,7 @@ async (req, res) => {
         .then(user => {
             user.covidStatus = req.body.covidStatus;
             user.save()
-                .then(user => res.json(user.covidStatus))
+                .then(userUpdated => res.json(userUpdated.covidStatus))
                 .catch(err => res.status(400).json(err))
         })
         .catch(err => res.status(400).json(err));
@@ -70,7 +53,7 @@ async (req, res) => {
         .then(user => {
             user.otherStatus = req.body.otherStatus;
             user.save()
-                .then(user => res.json(user.otherStatus))
+                .then(userUpdated => res.json(userUpdated.otherStatus))
                 .catch(err => res.status(400).json(err))
         })
         .catch(err => res.status(400).json(err));
@@ -95,7 +78,7 @@ async (req, res) => {
         .then(user => {
             user.needAHand = req.body.needAHand;
             user.save()
-                .then(user => res.json(user.needAHand))
+                .then(userUpdated => res.json(userUpdated.needAHand))
                 .catch(err => res.status(400).json(err))
         })
         .catch(err => res.status(400).json(err));

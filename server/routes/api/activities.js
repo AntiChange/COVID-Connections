@@ -25,7 +25,7 @@ async (req, res) => {
                 user.notifications.shift();
             }
             user.save()
-                .then(user => res.json(user.notifications))
+                .then(userUpdated => res.json(userUpdated.notifications))
                 .catch(err => res.status(400).json(err))
         })
         .catch(err => res.status(400).json(err));

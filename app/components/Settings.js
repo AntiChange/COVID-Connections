@@ -11,7 +11,7 @@ function Toggle({on, title, id}) {
   const userDetails = useAuthState();
 
   async function changeSetting(isOn) {
-    fetch(`${ROOT_URL}/api/settings/edit-index`, {
+    fetch(`${ROOT_URL}/api/settings/edit`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -67,8 +67,12 @@ export default function Settings() {
     }})
       .then(response => response.json())
       .then(data => {
-        setSettings(data);
-        console.log(data[0])
+        if (data == undefined) {
+          ToastAndroid.show("Error: Connecting to server", ToastAndroid.SHORT);
+        }
+        else {
+          setSettings(data);
+        }
       })
       .catch(err => {
         ToastAndroid.show("Error: " + err, ToastAndroid.SHORT);
@@ -101,7 +105,7 @@ export default function Settings() {
       <Toggle on={initialSettings[1]} title="Show Status to Other Contacts" id={1} />
       <Toggle on={initialSettings[2]} title="Show Status to Non-Contacts" id={2} />
       <Toggle on={initialSettings[3]} title="Hide My Connections" id={3} />
-      <Toggle on={initialSettings[4]} title="Hide Me From Other's Connections List" id={4} />
+      <Toggle on={initialSettings[4]} title="Hide Me From Others' Connections Lists" id={4} />
     </View>
     </ScrollView>
   )

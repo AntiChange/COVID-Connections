@@ -33,17 +33,13 @@ async (req, res) => {
             const contact = req.body.contact;
             User.findById(contact.id)
                 .then(otherUser => {
-                    let contacts = user.contacts;
-                    contacts.push(contact);
-                    user.contacts = contacts;
+                    user.contacts.push(contact);
                     user.save()
-                        .then(user => {
-                            let contacts2 = otherUser.contacts;
-                            contacts2.push({id: req.user.id, type: req.body.contact.type});
-                            otherUser.contacts = contacts2;
+                        .then(userUpdated => {
+                            otherUser.contacts.push({id: req.user.id, type: req.body.contact.type});
                             otherUser.save()
                                 .then(a => {
-                                    res.json(user.contacts);
+                                    res.json(userUpdated.contacts);
                                 })
                         })
                 })
@@ -63,28 +59,31 @@ async (req, res) => {
             const contact = req.body.contact;
             User.findById(contact.id)
                 .then(otherUser => {
-                    let contacts = user.contacts;
-                    const index = contacts.indexOf(contact.id);
-                    if (index > -1) {
-                        contacts.splice(index, 1);
+                    var index = -1;
+                    for (var i = 0; i < otherUser.contacts.length; i++) {
+                        if (user.contacts[i].id == req.user.id) {
+                            index = i;
+                            break;
+                        }
                     }
-                    user.contacts = contacts;
+                    if (index != -1) {
+                        user.contacts.splice(index, 1);
+                    }
                     user.save()
-                        .then(user => {
-                            let contacts2 = otherUser.contacts;
-                            var index = -1;
-                            for (var i = 0; i < contacts2.length; i++) {
-                                if (contacts2[i].id == req.user.id) {
-                                    index = i;
+                        .then(userUpdated => {
+                            var index2 = -1;
+                            for (var i = 0; i < otherUser.contacts.length; i++) {
+                                if (otherUser.contacts[i].id == req.user.id) {
+                                    index2 = i;
+                                    break;
                                 }
                             }
-                            if (index != -1) {
-                                contacts2.splice(index, 1);
+                            if (index2 != -1) {
+                                otherUser.contacts.splice(index, 1);
                             }
-                            otherUser.contacts = contacts2;
                             otherUser.save()
                                 .then(a => {
-                                    res.json(user.contacts);
+                                    res.json(userUpdated.contacts);
                                 })
                         })
                 })
@@ -102,13 +101,11 @@ async (req, res) => {
     User.findById(req.user.id)
         .then(user => {
             const contact = req.body.contact;
-            let contacts = user.contacts;
-            for (var i = 0; i < contacts.length; i++) {
-                if (contacts[i].id == contact.id) {
-                    contacts[i] = contact;
+            for (var i = 0; i < user.contacts.length; i++) {
+                if (user.contacts[i].id == contact.id) {
+                    user.contacts.set(i, contact)
                 }
             }
-            user.contacts = contacts;
             user.save()
                 .then(res.json(contact))
                 .catch(err => res.status(400).json(err))

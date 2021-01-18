@@ -20,11 +20,9 @@ router.post("/add", passport.authenticate('jwt', { session: false }),
 async (req, res) => {
     User.findById(req.user.id)
         .then(user => {
-            let notifs = user.notifications;
-            notifs.push(user.notifications)
-            user.notifications = notifs;
+            user.notifications.push(req.body.notification);
             user.save()
-                .then(user => res.json(user.notifications))
+                .then(userUpdated => res.json(userUpdated.notifications))
                 .catch(err => res.status(400).json(err))
         })
         .catch(err => res.status(400).json(err));
@@ -39,7 +37,7 @@ async (req, res) => {
         .then(user => {
             user.notifications = [];
             user.save()
-                .then(user => res.json(user.notifications))
+                .then(userUpdated => res.json(userUpdated.notifications))
                 .catch(err => res.status(400).json(err))
         })
         .catch(err => res.status(400).json(err));
