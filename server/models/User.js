@@ -15,14 +15,14 @@ const UserSchema = new Schema({
     required: true
   },
   contacts: {
-    type: [Object],
+    type: [Schema.Types.ObjectId],
     required: true,
     default: []
-  }, // {userId, tier}
+  },
   settings: {
     type: [Boolean],
     required: true,
-    default: [false, false, false, true, true]
+    default: [true, true, false, false, false]
   }, // Show Status to Close Contacts, Show Status to Other Contacts, Show Status to Non-Contacts, Hide My Connections, Hide Me From Other's Connections List
   notifications: {
     type: [String],
@@ -30,19 +30,19 @@ const UserSchema = new Schema({
     default: []
   },
   activities: {
-    type: [Object],
+    type: [String], // Add dates into string in preprocessing
     required: true,
     default: []
   }, // {name: String, date: Date}
   covidStatus: {
     type: String,
     required: true,
-    default: "None"
+    default: "noExposure"
   },
   otherStatus: {
     type: String,
     required: true,
-    default: "None"
+    default: "isolationFalse"
   },
   needAHand: {
     type: [String],

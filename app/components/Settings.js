@@ -1,4 +1,4 @@
-import React, {useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, ToastAndroid, ActivityIndicator } from 'react-native';
 import { Modal, Portal, Provider } from 'react-native-paper';
 import { useAuthState } from '../auth';
@@ -68,7 +68,7 @@ export default function Settings() {
       .then(response => response.json())
       .then(data => {
         if (data == undefined) {
-          ToastAndroid.show("Error: Connecting to server", ToastAndroid.SHORT);
+          ToastAndroid.show("Error connecting to server", ToastAndroid.SHORT);
         }
         else {
           setSettings(data);

@@ -32,7 +32,7 @@ async (req, res) => {
 // // @route POST api/settings/covidStatus
 // @desc Edit covidStatus
 // @access Private
-router.post("/covidStatus", passport.authenticate('jwt', { session: false }), 
+router.post("/covid-status", passport.authenticate('jwt', { session: false }), 
 async (req, res) => {
     User.findById(req.user.id)
         .then(user => {
@@ -47,7 +47,7 @@ async (req, res) => {
 // // @route POST api/settings/otherStatus
 // @desc Edit otherStatus
 // @access Private
-router.post("/otherStatus", passport.authenticate('jwt', { session: false }), 
+router.post("/other-status", passport.authenticate('jwt', { session: false }), 
 async (req, res) => {
     User.findById(req.user.id)
         .then(user => {
@@ -64,7 +64,7 @@ async (req, res) => {
 // @access Private
 router.get("/need-a-hand/:userId", passport.authenticate('jwt', { session: false }), 
 async (req, res) => {
-    User.findById(userId)
+    User.findById(req.user.id)
         .then(user => res.json(user.needAHand))
         .catch(err => res.status(400).json(err));
 });
@@ -74,7 +74,7 @@ async (req, res) => {
 // @access Private
 router.post("/need-a-hand/edit", passport.authenticate('jwt', { session: false }), 
 async (req, res) => {
-    User.findById(userId)
+    User.findById(req.user.id)
         .then(user => {
             user.needAHand = req.body.needAHand;
             user.save()

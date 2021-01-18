@@ -3,7 +3,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import Home from "./Home";
 import Settings from "./Settings";
-import UpdateStatus from "./UpdateStatus";
+import Status from "./Status";
 
 const Drawer = createDrawerNavigator();
 
@@ -13,7 +13,7 @@ export default function DrawerNav() {
       <Drawer.Navigator initialRouteName="Home">
         <Drawer.Screen name="Home" component={Home} />
         <Drawer.Screen name="Settings" component={Settings} />
-        <Drawer.Screen name="Update Status" component={UpdateStatus} />
+        <Drawer.Screen name="My Status" component={Status} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

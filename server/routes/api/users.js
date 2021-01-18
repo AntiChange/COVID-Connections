@@ -5,23 +5,33 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
 
-// // @route GET api/users/:username
-// @desc Get user by username
-// @access Private
-router.get("/:username", passport.authenticate('jwt', { session: false }), 
-async (req, res) => {
-    User.findOne(req.params.username)
-        .then(user => res.json(user))
-        .catch(err => res.status(400).json(err));
-});
-
 // // @route GET api/users/:id
 // @desc Get user by ID
 // @access Private
 router.get("/:id", passport.authenticate('jwt', { session: false }), 
 async (req, res) => {
     User.findById(req.params.id)
-        .then(user => res.json(user))
+        .then(user => {
+            let data = {
+                id: user.id,
+                name: user.name,
+                username: user.username,
+                needAHand: user.needAHand
+            }
+            const isSelf = (user.id == req.user.id);
+            const isContact = (user.contacts.indexOf(req.user.id) != -1);
+
+            // Data is given based on user privacy settings
+            if (isSelf || user.settings[2] == true || (isContact && user.settings[0] == true) || (isContact && user.settings[1] == true)) {
+                data.covidStatus = user.covidStatus;
+                data.otherStatus = user.otherStatus;
+                data.activities = user.activities;
+            }
+            if (isSelf || (user.settings[3] == false)) {
+                data.contacts = user.contacts;
+            }
+            res.json(data);
+        })
         .catch(err => res.status(400).json(err));
 });
 
@@ -95,7 +105,7 @@ router.post("/login", async (req, res) => {
                     user.token = token;
                     user.save()
                         .then(user => res.json({
-                          user: user,
+                          user: { id: user.id, name: user.name, username: user.username, token: user.token },
                           token: "Bearer " + token
                         }))
                         .catch(err => console.log(err))

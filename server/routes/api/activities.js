@@ -20,12 +20,12 @@ router.post("/add", passport.authenticate('jwt', { session: false }),
 async (req, res) => {
     User.findById(req.user.id)
         .then(user => {
-            user.notifications.push(req.body.activity);
-            if (user.notifications.length > 10) { // Pop one if the list is longer than 10 items
-                user.notifications.shift();
+            user.activities.push(req.body.activity);
+            if (user.activities.length > 10) { // Pop one if the list is longer than 10 items
+                user.activities.shift();
             }
             user.save()
-                .then(userUpdated => res.json(userUpdated.notifications))
+                .then(userUpdated => res.json(userUpdated.activities))
                 .catch(err => res.status(400).json(err))
         })
         .catch(err => res.status(400).json(err));

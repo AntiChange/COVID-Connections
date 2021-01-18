@@ -30,13 +30,13 @@ router.post("/add", passport.authenticate('jwt', { session: false }),
 async (req, res) => {
     User.findById(req.user.id)
         .then(user => {
-            const contact = req.body.contact;
-            User.findById(contact.id)
+            const userId = req.body.userId;
+            User.findById(userId)
                 .then(otherUser => {
-                    user.contacts.push(contact);
+                    user.contacts.push(userId);
                     user.save()
                         .then(userUpdated => {
-                            otherUser.contacts.push({id: req.user.id, type: req.body.contact.type});
+                            otherUser.contacts.push(req.user.id);
                             otherUser.save()
                                 .then(a => {
                                     res.json(userUpdated.contacts);
@@ -56,31 +56,13 @@ router.post("/remove", passport.authenticate('jwt', { session: false }),
 async (req, res) => {
     User.findById(req.user.id)
         .then(user => {
-            const contact = req.body.contact;
-            User.findById(contact.id)
+            const userId = req.body.userId;
+            User.findById(userId)
                 .then(otherUser => {
-                    var index = -1;
-                    for (var i = 0; i < otherUser.contacts.length; i++) {
-                        if (user.contacts[i].id == req.user.id) {
-                            index = i;
-                            break;
-                        }
-                    }
-                    if (index != -1) {
-                        user.contacts.splice(index, 1);
-                    }
+                    user.contacts.pull(userId)
                     user.save()
                         .then(userUpdated => {
-                            var index2 = -1;
-                            for (var i = 0; i < otherUser.contacts.length; i++) {
-                                if (otherUser.contacts[i].id == req.user.id) {
-                                    index2 = i;
-                                    break;
-                                }
-                            }
-                            if (index2 != -1) {
-                                otherUser.contacts.splice(index, 1);
-                            }
+                            otherUser.contacts.pull(req.body.id);
                             otherUser.save()
                                 .then(a => {
                                     res.json(userUpdated.contacts);
@@ -93,6 +75,7 @@ async (req, res) => {
         .catch(err => res.status(400).json(err));
 });
 
+/*
 // // @route POST api/contacts/edit
 // @desc Edit contact
 // @access Private
@@ -102,7 +85,7 @@ async (req, res) => {
         .then(user => {
             const contact = req.body.contact;
             for (var i = 0; i < user.contacts.length; i++) {
-                if (user.contacts[i].id == contact.id) {
+                if (user.contacts[i] == contact.id) {
                     user.contacts.set(i, contact)
                 }
             }
@@ -112,6 +95,6 @@ async (req, res) => {
 
         })
         .catch(err => res.status(400).json(err));
-});
+});*/
 
 module.exports = router;
