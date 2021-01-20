@@ -6,53 +6,171 @@ import {
   View,
   TouchableOpacity,
   ToastAndroid,
+  ActivityIndicator
 } from 'react-native';
 import {Modal, Portal, Provider, TextInput} from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import Accordion from 'react-native-collapsible/Accordion';
-import { useAuthDispatch, logout } from '../auth';
+import { useAuthDispatch, logout, useAuthState } from '../auth';
+import Constants from 'expo-constants';
+
+const ROOT_URL = Constants.manifest.extra.serverUrl;
 
 export default function Home() {
-  const CONTENT = [
-    {
-      title: 'Aidan Lee', subtitle: 'Healthy',
-      content: "Status: " + "Self-isolating, " + "Unvaccinated" + "\n\n" + "January 16th" + " - " + "Went to grocery store\nJanuary 14th - Went to friends birthday party\nJanuary 4th - Returned from Italy trip",
-    },
-    {
-      title: 'Sarah Anderson', subtitle: 'COVID-19 Positive',
-      content: "Status: Sick, Self-isolating\n\nWeekly - Works at office\nJanuary 14th - Started to feel unwell\nJanuary 12th - Went to bar after work",
-    },
-    {
-      title: 'Lucas Flores', subtitle: 'Healthy',
-      content: "Status: Frontline Worker, Vaccinated\n\nWeekly - Works as Restaurant waiter\nJanuary 12th - Went to eat in nearby restaurant\nJanuary 1st - Celebrated with 2 friends",
-    },
-  ];
-  
-  const newUser = {
-    title: 'Liam Tucker', subtitle: 'Possible contact with COVID-19',
-    content: "Status: Self-isolating, Unvaccinated\n\nWeekly - Works from home\nJanuary 15th - Went grocery shopping\nJanuary 10th - Visited family"
-  }
-  const [contentList, editContentList] = useState(CONTENT);
+  const [contentList, setContentList] = useState(null);
   const [activeSections, setActiveSections] = useState([]);
   const [collapsed, setCollapsed] = useState(true);
   const multipleSelect = false;
   const [modalVisible, setModalVisible] = useState(false);
   const [text, setText] = React.useState('');
+  const [notifs, setNotifs] = React.useState([]);
   const [, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
 
   const dispatch = useAuthDispatch();
+  const userDetails = useAuthState();
 
-  function addUser() {
-    let newContent = CONTENT;
-    newContent.unshift(newUser);
-    editContentList(newContent);
-    forceUpdate();
+  async function getData() {
+    fetch(`${ROOT_URL}/api/contacts/`, {
+        method: 'GET',
+        headers: {
+          'Authorization': userDetails.token
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data == undefined) {
+          ToastAndroid.show("Error connecting to server", ToastAndroid.SHORT);
+        }
+        else {
+          setContacts(data);
+        }
+      })
+      .catch(err => {
+        ToastAndroid.show("Error: " + err, ToastAndroid.SHORT);
+      })
   }
 
-  function submitText() {
-    ToastAndroid.show("Request sent", ToastAndroid.SHORT);
+  async function getNotifications() {
+    fetch(`${ROOT_URL}/api/notifications/`, {
+      method: 'GET',
+      headers: {
+        'Authorization': userDetails.token
+    }})
+      .then(response => response.json())
+      .then(data => {
+        if (data) {
+          setNotifs(data);
+        }
+      })
+      .catch(err => console.log(err));
+    }
+
+  useEffect(() => {
+    getData()
+        .catch(err => console.log(err))
+  }, []);
+
+  useEffect(() => {
+    getNotifications()
+        .catch(err => console.log(err))
+  }, []);
+
+  useEffect(() => {
+    if (notifs.length > 0) {
+      setModalVisible(true);
+    }
+  }, notifs)
+
+  function dismissModal() {
+    setModalVisible(false);
+    let newNotifs = notifs;
+    newNotifs.shift();
+    setNotifs(newNotifs);
+  }
+
+  async function addUser(username) {
+    if (username == userDetails.user.username) {
+      ToastAndroid.show(`Cannot add self`, ToastAndroid.SHORT);
+      return;
+    }
     setText("");
+    if (username) {
+      fetch(`${ROOT_URL}/api/contacts/add`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': userDetails.token
+        },
+        body: JSON.stringify({username:username})
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data == null) {
+            return;
+          }
+          else if (typeof(data) == "string") {
+            ToastAndroid.show(data, ToastAndroid.SHORT);
+          }
+          else {
+            let newList = contentList;
+            newList.push(formatUser(data));
+            setContentList(newList);
+          }
+        })
+        .catch(err => ToastAndroid.show(`Error: ${err}`, ToastAndroid.SHORT));
+    }
+  }
+
+  function formatUser(contact) {
+    let user = {
+      title: contact.name,
+    };
+    // This is really annoying we need to fix this
+    if (contact.covidStatus) { 
+      switch(contact.covidStatus) {
+        case "noExposure":
+          user.subtitle = "No known exposure";
+          break;
+        case "potentialContact":
+          user.subtitle = "Possible Contact with Confirmed Case";
+          break;
+        case "definiteContact":
+          user.subtitle = "Close Contact with Confirmed Case";
+          break;
+        case "positiveCase":
+          user.subtitle = "Tested Positive for COVID-19";
+          break;
+      }
+    }
+    else {
+      user.subtitle = ""
+    }
+    let content = "";
+    if (contact.otherStatus) {
+      content = content + `Status: ${contact.otherStatus == "isolationTrue" ? "Self-isolating" : "Not self-isolating"}`;
+    }
+    if (contact.activities) {
+      content += "\n\nRecent activity: ";
+      contact.activities.forEach(activity => {
+        content += `\n${activity}`;
+      });
+    }
+    user.content = content;
+    return user;
+  }
+
+  function setContacts(data) {
+    if (data.length > 0) {
+      setContentList(data.map(contact => {
+        return formatUser(contact);
+      }));
+    }
+    else {
+      setContentList([]);
+    }
+    forceUpdate();
   }
 
   function handleLogout() {
@@ -68,13 +186,20 @@ export default function Home() {
   };
 
   function renderHeader(section, _, isActive) {
+    let subtitle;
+    if (section.subtitle) {
+      subtitle = (<Text style={styles.headerText2}>  |  {section.subtitle}</Text>);
+    }
+    else {
+      subtitle = (<Text></Text>);
+    }
     return (
       <Animatable.View
         duration={400}
         style={[styles.header, isActive ? styles.active : styles.inactive]}
         transition="backgroundColor"
       >
-        <Text><Text style={styles.headerText}>{section.title}</Text><Text style={styles.headerText2}>  |  {section.subtitle}</Text></Text>
+        <Text><Text style={styles.headerText}>{section.title}</Text>{subtitle}</Text>
       </Animatable.View>
     );
   };
@@ -92,47 +217,44 @@ export default function Home() {
       </Animatable.View>
     );
   }
+
+  const contactsList = contentList == null ? (<View></View>) : (
+    <Accordion
+      activeSections={activeSections}
+      sections={contentList}
+      touchableComponent={TouchableOpacity}
+      expandMultiple={multipleSelect}
+      renderHeader={renderHeader}
+      renderContent={renderContent}
+      duration={400}
+      onChange={setSections}
+    />);
   return (
     <Provider>
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ paddingTop: 30 }}>
-        <Text style={styles.title} onPress={() => setModalVisible(true)}>Your Circle</Text>
+        <Text style={styles.title}>Your Circle</Text>
 
         <TextInput
-          label="Add a user..."
+          label="Add contact by username"
           value={text}
           placeholderTextColor="#B19CD9"
           onChangeText={text => setText(text)}
-          onEndEditing={submitText}
+          onSubmitEditing={() => addUser(text)}
         />
         <Portal>
-        <Modal visible={modalVisible} onDismiss={() => setModalVisible(false)} contentContainerStyle={{backgroundColor: "#B19CD9", padding:20, borderRadius:25}} style={{marginLeft:20, marginRight:20}}>
-          <Text style={{fontWeight:"bold", fontSize:20, lineHeight: 30}}>Sarah Anderson has tested positive for COVID-19. If you have come into contact with Sarah in the past 14 days, please self-isolate and update your status.</Text>
+        <Modal visible={modalVisible} onDismiss={dismissModal} contentContainerStyle={{backgroundColor: "#B19CD9", padding:20, borderRadius:25}} style={{marginLeft:20, marginRight:20}}>
+          <Text style={{fontWeight:"bold", fontSize:20, lineHeight: 30}}>{notifs[0]}</Text>
         </Modal>
         </Portal>
 
-        <Accordion
-          activeSections={activeSections}
-          sections={contentList}
-          touchableComponent={TouchableOpacity}
-          expandMultiple={multipleSelect}
-          renderHeader={renderHeader}
-          renderContent={renderContent}
-          duration={400}
-          onChange={setSections}
-        />
+        {contactsList}
+
         <Text 
           backgroundColor = "#FFFFFFF"
           style={styles.button1} 
           onPress={handleLogout}
           > Log Out </Text>
-        
-        <Text 
-          backgroundColor = "#FFFFFFF00"
-          style={{color:"#FFFFFFF00"}}
-          onPress={addUser}
-          style={{marginTop: 150, fontSize:20}}
-          >                             </Text>
       </ScrollView>
     </View>
     </Provider>
