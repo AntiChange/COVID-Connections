@@ -8,19 +8,40 @@ const User = require("../../models/User");
 // @access Private
 router.get("/", passport.authenticate('jwt', { session: false }), 
 async (req, res) => {
-    User.findById(req.user.id)
-        .then(user => res.json(user.contacts))
-        .catch(err => res.status(400).json(err));
-});
-
-// // @route GET api/contacts/
-// @desc Get a user's contacts
-// @access Private
-router.get("/", passport.authenticate('jwt', { session: false }), 
-async (req, res) => {
-    User.findById(req.user.id)
-        .then(user => res.json(user.contacts))
-        .catch(err => res.status(400).json(err));
+    try {
+        const user = await User.findById(req.user.id)
+        let contacts = [];
+        for (const contactId of user.contacts) {
+            try {
+                const contact = await User.findById(contactId);
+                let data = {
+                    id: contact.id,
+                    name: contact.name,
+                    username: contact.username,
+                    needAHand: contact.needAHand
+                }
+    
+                // Data is given based on user privacy settings
+                if (contact.settings[2] || contact.settings[0] || contact.settings[1]) {
+                    data.covidStatus = contact.covidStatus;
+                    data.otherStatus = contact.otherStatus;
+                    data.activities = contact.activities;
+                }
+                if (contact.settings[3] == false) {
+                    data.contacts = contact.contacts;
+                }
+                contacts.push(data);
+            }
+            catch(err) {
+                console.log(err)
+            };
+        }
+        console.log(contacts)
+        res.json(contacts);
+    }
+    catch(err) {
+        res.status(400).json(err);
+    }
 });
 
 // // @route POST api/contacts/add
@@ -30,13 +51,14 @@ router.post("/add", passport.authenticate('jwt', { session: false }),
 async (req, res) => {
     User.findById(req.user.id)
         .then(user => {
-            const userId = req.body.userId;
-            User.findById(userId)
+            const username = req.body.username;
+            User.findOne( { username: username })
                 .then(otherUser => {
-                    user.contacts.push(userId);
+                    if (otherUser == null) return res.status(400).json("User not found");
+                    user.contacts.addToSet(otherUser.id);
                     user.save()
                         .then(userUpdated => {
-                            otherUser.contacts.push(req.user.id);
+                            otherUser.contacts.addToSet(req.user.id);
                             otherUser.save()
                                 .then(a => {
                                     res.json(userUpdated.contacts);

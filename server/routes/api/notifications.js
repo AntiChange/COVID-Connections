@@ -20,7 +20,7 @@ router.post("/add", passport.authenticate('jwt', { session: false }),
 async (req, res) => {
     User.findById(req.user.id)
         .then(user => {
-            user.notifications.push(req.body.notification);
+            user.notifications.addToSet(req.body.notification);
             user.save()
                 .then(userUpdated => res.json(userUpdated.notifications))
                 .catch(err => res.status(400).json(err))

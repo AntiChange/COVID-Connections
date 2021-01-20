@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const User = require("../../models/User");
+const contactNotifications = require("../../util/contactNotifications");
 
 // // @route GET api/settings/
 // @desc Get all settings
@@ -38,7 +39,23 @@ async (req, res) => {
         .then(user => {
             user.covidStatus = req.body.covidStatus;
             user.save()
-                .then(userUpdated => res.json(userUpdated.covidStatus))
+                .then(userUpdated => {
+                    res.json(userUpdated.covidStatus);
+                    
+                    // Notify contacts about COVID-positive exposure (if settings allow it)
+                    if (req.body.covidStatus == "positiveCase" || req.body.covidStatus == "definiteContact") {
+                        if (userUpdated.settings[0] || userUpdated.settings[1]) {
+                            let notification;
+                            if (req.body.covidStatus == "positiveCase") {
+                                notification = `${userUpdated.name} has tested positive for COVID-19. If you have come into contact with ${userUpdated.name} in the past 14 days, please self-isolate and update your status.`;
+                            }
+                            else {
+                                notification = `${userUpdated.name} has come into contact with a confirmed COVID-19 case. If you have come into contact with ${userUpdated.name} in the past 14 days, please self-isolate and update your status.`;
+                            }
+                            contactNotifications(userUpdated.contacts, notification);
+                        }
+                    }
+                })
                 .catch(err => res.status(400).json(err))
         })
         .catch(err => res.status(400).json(err));
